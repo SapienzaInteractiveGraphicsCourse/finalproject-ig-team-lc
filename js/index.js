@@ -53,15 +53,76 @@ function winResize() {
 	camera.updateProjectionMatrix();
 }
 
+var Colors = {
+	white:0xd8d0d1,
+	brown:0x40230d,
+};
+
+// LIGHTS
+var hemisphereLight, shadowLight;
+
+function createLights() {
+	hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
+	shadowLight = new THREE.DirectionalLight(0xffffff, .9);
+	shadowLight.position.set(150, 350, 350);
+	shadowLight.castShadow = true;
+
+	shadowLight.shadow.camera.left = -400;
+	shadowLight.shadow.camera.right = 400;
+	shadowLight.shadow.camera.top = 400;
+	shadowLight.shadow.camera.bottom = -400;
+	shadowLight.shadow.camera.near = 1;
+	shadowLight.shadow.camera.far = 1000;
+
+	shadowLight.shadow.mapSize.width = 2048;
+	shadowLight.shadow.mapSize.height = 2048;
+
+	scene.add(hemisphereLight);
+	scene.add(shadowLight);
+}
+
+Ground = function(){
+
+	// create ground cylinder;
+	var geometry = new THREE.CylinderGeometry(1300,1300,700,100,10);
+
+	// rotate on x axis
+	geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+
+	// material
+	var material = new THREE.MeshPhongMaterial({
+		color:Colors.brown,
+		transparent:true,
+		opacity:.6,
+		shading:THREE.FlatShading,
+	});
+
+	this.mesh = new THREE.Mesh(geometry, material);
+
+	// ground receive shadows
+	this.mesh.receiveShadow = true;
+}
+
+var ground;
+
+function createGround(){
+	ground = new Ground();
+	ground.mesh.position.y = -1300;
+	scene.add(ground.mesh);
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
 function init() {
 	createScene();
+	createLights();
+	createGround();
 	loop();
 }
 
 function loop(){
+	ground.mesh.rotation.z += .005;
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }
