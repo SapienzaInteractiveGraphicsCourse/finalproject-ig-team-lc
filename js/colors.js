@@ -4,6 +4,7 @@ const Colors = {
 	brown:0x40230d,
 	pink:0xF5986E,
 	brownDark:0x23190f,
-	blue:0x68c3c0,
+    blue:0x68c3c0,
+    black:0xffffff
 }
 export { Colors }

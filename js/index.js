@@ -1,3 +1,4 @@
+import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
 
@@ -25,8 +26,9 @@ function createScene() {
 		nearPlane,
 		farPlane
 		);
-
-	camera.position.set(0, 100, 200);
+	camera.position.set(0, 50, 200);
+	camera.lookAt(0, 50, 0)
+	camera.up.set(0, 0, 1)
 
 	renderer = new THREE.WebGLRenderer({
 		// Allow transparency to show the gradient background
@@ -97,6 +99,14 @@ function createCar(){
 	scene.add(car.mesh);
 }
 
+var sky;
+// push down sky to let clouds closer to the ground
+function createSky(){
+	sky = new Sky();
+	sky.mesh.position.y = -1650;
+	scene.add(sky.mesh);
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
@@ -105,11 +115,13 @@ function init() {
 	createLights();
 	createGround();
 	createCar();
+	createSky();
 	loop();
 }
 
 function loop(){
 	ground.mesh.rotation.z += .0005;
+	sky.mesh.rotation.z += .001;
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }

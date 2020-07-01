@@ -28,8 +28,6 @@ var Ground = function(){
 	// material
 	var material = new THREE.MeshPhongMaterial({
 		color:Colors.brown,
-		transparent:false,
-		opacity:.6,
 		flatShading:THREE.FlatShading,
 	});
 
