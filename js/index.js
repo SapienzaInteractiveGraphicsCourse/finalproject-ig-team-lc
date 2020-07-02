@@ -96,11 +96,11 @@ function createGround(){
 
 function createCar(){
 	car = new Car();
-	car.mesh.scale.set(.25,.25,.25);
-	car.mesh.position.x = -100;
-	car.mesh.position.y = 25;
-	car.mesh.position.z = -45;
-	scene.add(car.mesh);
+	scene.add(car.cabin);
+	scene.add(car.rightFrontWheel);
+	scene.add(car.leftFrontWheel);
+	scene.add(car.rightRearWheel);
+	scene.add(car.leftRearWheel);
 }
 
 var sky;

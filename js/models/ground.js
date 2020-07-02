@@ -31,7 +31,7 @@ var Ground = function(){
 		shading:THREE.FlatShading,
 	});
 
-	this.mesh = new THREE.Mesh(geometry, material);
+	this.mesh = new Physijs.BoxMesh(geometry, material,0);
 
 	// ground receive shadows
 	this.mesh.receiveShadow = true;
