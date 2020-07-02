@@ -126,7 +126,7 @@ function init() {
 function loop(){
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024*rotationSpeed;
-	scene.simulate();
+	// scene.simulate();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }
