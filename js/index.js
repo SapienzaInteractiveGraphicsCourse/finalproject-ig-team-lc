@@ -5,6 +5,7 @@ import { Car } from './models/car.js';
 var scene,
 		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
+var rotationSpeed = 1;
 
 function createScene() {
 	HEIGHT = window.innerHeight;
@@ -13,7 +14,7 @@ function createScene() {
 	scene = new THREE.Scene();
 
 	// fog effect
-	scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
+	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
 
 	// camera
 	aspectRatio = WIDTH / HEIGHT;
@@ -90,7 +91,7 @@ function createGround(){
 	scene.add(ground.mesh);
 }
 
-function createCar(){ 
+function createCar(){
 	car = new Car();
 	car.mesh.scale.set(.25,.25,.25);
 	car.mesh.position.x = -100;
@@ -120,8 +121,8 @@ function init() {
 }
 
 function loop(){
-	ground.mesh.rotation.z += .0005;
-	sky.mesh.rotation.z += .001;
+	ground.mesh.rotation.z += .0005*rotationSpeed;
+	sky.mesh.rotation.z += .00024*rotationSpeed;
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }

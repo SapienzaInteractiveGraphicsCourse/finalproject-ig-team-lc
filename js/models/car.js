@@ -1,9 +1,9 @@
 import { Colors } from '../colors.js';
 
 var Car = function() {
-	
+
 	this.mesh = new THREE.Object3D();
-	
+
 	// Create the cabin
 	var geomCabin = new THREE.BoxGeometry(130,80,80,1,1,1);
 	var matCabin = new THREE.MeshPhongMaterial({color:Colors.red, flatShading:THREE.FlatShading});
@@ -11,7 +11,7 @@ var Car = function() {
 	cabin.castShadow = true;
 	cabin.receiveShadow = true;
 	this.mesh.add(cabin);
-	
+
 	// Create the wheels
 
 	var geomWheel = new THREE.BoxGeometry(30,30,10,1,1,1);

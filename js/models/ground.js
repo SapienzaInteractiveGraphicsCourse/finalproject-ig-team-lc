@@ -21,14 +21,14 @@ var Ground = function(){
 		var randomDistance = 5 + Math.random() * 15;
 
 		// store some data associated to it
-		this.irregularities.push({y: v.y, x: v.x, z: v.z, 
+		this.irregularities.push({y: v.y, x: v.x, z: v.z,
 			ang: randomAngle, dis: randomDistance });
 	};
 
 	// material
 	var material = new THREE.MeshPhongMaterial({
 		color:Colors.brown,
-		flatShading:THREE.FlatShading,
+		shading:THREE.FlatShading,
 	});
 
 	this.mesh = new THREE.Mesh(geometry, material);
@@ -42,13 +42,13 @@ Ground.prototype.addIrregularities = function (){
 	// get the vertices
 	var verts = this.mesh.geometry.vertices;
 	var l = verts.length;
-	
+
 	for (var i=0; i<l; i++){
 		var v = verts[i];
-		
+
 		// get the data associated to it
 		var vprops = this.irregularities[i];
-		
+
 		// update the position of the vertex
 		v.x = vprops.x + Math.cos(vprops.ang)*vprops.dis;
 		v.y = vprops.y + Math.sin(vprops.ang)*vprops.dis;
