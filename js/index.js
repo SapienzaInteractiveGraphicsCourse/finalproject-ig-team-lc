@@ -2,6 +2,9 @@ import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
 
+Physijs.scripts.worker = '/js/physijs_worker.js';
+Physijs.scripts.ammo = '/js/ammo.js';
+
 var scene,
 		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
@@ -11,7 +14,7 @@ function createScene() {
 	HEIGHT = window.innerHeight;
 	WIDTH = window.innerWidth;
 
-	scene = new THREE.Scene();
+	scene = new Physijs.Scene;
 
 	// fog effect
 	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
@@ -123,6 +126,7 @@ function init() {
 function loop(){
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024*rotationSpeed;
+	scene.simulate();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }

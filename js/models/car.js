@@ -7,7 +7,7 @@ var Car = function() {
 	// Create the cabin
 	var geomCabin = new THREE.BoxGeometry(130,80,80,1,1,1);
 	var matCabin = new THREE.MeshPhongMaterial({color:Colors.red, flatShading:THREE.FlatShading});
-	var cabin = new THREE.Mesh(geomCabin, matCabin);
+	var cabin = new Physijs.BoxMesh(geomCabin, matCabin);
 	cabin.castShadow = true;
 	cabin.receiveShadow = true;
 	this.mesh.add(cabin);
@@ -18,7 +18,7 @@ var Car = function() {
 	var matWheel = new THREE.MeshPhongMaterial({color:Colors.brownDark, flatShading:THREE.FlatShading});
 
 	// right front wheel
-	var rightFrontWheel = new THREE.Mesh(geomWheel, matWheel);
+	var rightFrontWheel = new Physijs.BoxMesh(geomWheel, matWheel);
 	rightFrontWheel.position.x = cabin.position.x + geomCabin.parameters.width/2 - geomWheel.parameters.width/2;
 	rightFrontWheel.position.y = cabin.position.y - geomCabin.parameters.height/2;
 	rightFrontWheel.position.z = cabin.position.z + geomCabin.parameters.depth/2 + geomWheel.parameters.depth/2;
@@ -27,7 +27,7 @@ var Car = function() {
 	this.mesh.add(rightFrontWheel);
 
 	// left front wheel
-	var leftFrontWheel = new THREE.Mesh(geomWheel, matWheel);
+	var leftFrontWheel = new Physijs.BoxMesh(geomWheel, matWheel);
 	leftFrontWheel.position.x = cabin.position.x + geomCabin.parameters.width/2 - geomWheel.parameters.width/2;
 	leftFrontWheel.position.y = cabin.position.y - geomCabin.parameters.height/2;
 	leftFrontWheel.position.z = cabin.position.z - geomCabin.parameters.depth/2 - geomWheel.parameters.depth/2;
@@ -36,7 +36,7 @@ var Car = function() {
 	this.mesh.add(leftFrontWheel);
 
 	// right rear wheel
-	var rightRearWheel = new THREE.Mesh(geomWheel, matWheel);
+	var rightRearWheel = new Physijs.BoxMesh(geomWheel, matWheel);
 	rightRearWheel.position.x = cabin.position.x - geomCabin.parameters.width/2 + geomWheel.parameters.width/2;
 	rightRearWheel.position.y = cabin.position.y - geomCabin.parameters.height/2;
 	rightRearWheel.position.z = cabin.position.z + geomCabin.parameters.depth/2 + geomWheel.parameters.depth/2;
@@ -45,7 +45,7 @@ var Car = function() {
 	this.mesh.add(rightRearWheel);
 
 	// left rear wheel
-	var leftRearWheel = new THREE.Mesh(geomWheel, matWheel);
+	var leftRearWheel = new Physijs.BoxMesh(geomWheel, matWheel);
 	leftRearWheel.position.x = cabin.position.x - geomCabin.parameters.width/2 + geomWheel.parameters.width/2;
 	leftRearWheel.position.y = cabin.position.y - geomCabin.parameters.height/2;
 	leftRearWheel.position.z = cabin.position.z - geomCabin.parameters.depth/2 - geomWheel.parameters.depth/2;
