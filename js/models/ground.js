@@ -28,7 +28,7 @@ var Ground = function(){
 	// material
 	var material = new THREE.MeshPhongMaterial({
 		color:Colors.brown,
-		shading:THREE.FlatShading,
+		flatShading:THREE.FlatShading,
 	});
 
 	this.mesh = new Physijs.ConvexMesh(geometry, material,0);
