@@ -96,11 +96,45 @@ function createGround(){
 
 function createCar(){
 	car = new Car();
-	scene.add(car.cabin);
-	scene.add(car.rightFrontWheel);
-	scene.add(car.leftFrontWheel);
-	scene.add(car.rightRearWheel);
-	scene.add(car.leftRearWheel);
+	
+	// body
+	scene.add(car.body);
+
+	// front left wheel
+	scene.add(car.wheel_fl);
+	var wheel_fl_constraint = new Physijs.DOFConstraint(
+		car.wheel_fl, car.body, new THREE.Vector3(car.wheel_fl.position.x, car.wheel_fl.position.y, car.wheel_fl.position.z)
+	);
+	scene.addConstraint( wheel_fl_constraint );
+	wheel_fl_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
+	wheel_fl_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
+
+	// front right wheel
+	scene.add(car.wheel_fr);
+	var wheel_fr_constraint = new Physijs.DOFConstraint(
+		car.wheel_fr, car.body, new THREE.Vector3(car.wheel_fr.position.x, car.wheel_fr.position.y, car.wheel_fr.position.z)
+	);
+	scene.addConstraint( wheel_fr_constraint );
+	wheel_fr_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
+	wheel_fr_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
+
+	// back left wheel
+	scene.add(car.wheel_bl);
+	var wheel_bl_constraint = new Physijs.DOFConstraint(
+		car.wheel_bl, car.body, new THREE.Vector3(car.wheel_bl.position.x, car.wheel_bl.position.y, car.wheel_bl.position.z)
+	);
+	scene.addConstraint( wheel_bl_constraint );
+	wheel_bl_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
+	wheel_bl_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
+
+	// back right wheel
+	scene.add(car.wheel_br);
+	var wheel_br_constraint = new Physijs.DOFConstraint(
+		car.wheel_br, car.body, new THREE.Vector3(car.wheel_br.position.x, car.wheel_br.position.y, car.wheel_br.position.z)
+	);
+	scene.addConstraint( wheel_br_constraint );
+	wheel_br_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
+	wheel_br_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
 }
 
 var sky;
@@ -124,9 +158,10 @@ function init() {
 }
 
 function loop(){
+	ground.mesh.__dirtyRotation = true;
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024*rotationSpeed;
-	// scene.simulate();
+	scene.simulate();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }
