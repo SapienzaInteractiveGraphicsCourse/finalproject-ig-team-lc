@@ -2,7 +2,7 @@ import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
 
-Physijs.scripts.worker = '/js/physijs_worker.js';
+Physijs.scripts.worker = './js/physijs_worker.js';
 Physijs.scripts.ammo = '/js/ammo.js';
 
 var scene,
