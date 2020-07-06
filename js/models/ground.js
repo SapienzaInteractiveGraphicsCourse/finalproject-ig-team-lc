@@ -26,10 +26,14 @@ var Ground = function(){
 	};
 
 	// material
-	var material = new THREE.MeshPhongMaterial({
-		color:Colors.brown,
-		flatShading:THREE.FlatShading,
-	});
+	var loader = new THREE.TextureLoader();
+	var material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial({ map: loader.load( 'textures/ground.png' ) }),
+		2, // high friction
+		.5 // low restitution
+	);
+	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+	material.map.repeat.set( 115, 6);
 
 	this.mesh = new Physijs.ConvexMesh(geometry, material,0);
 

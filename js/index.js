@@ -15,6 +15,7 @@ function createScene() {
 	WIDTH = window.innerWidth;
 
 	scene = new Physijs.Scene;
+	scene.setGravity(new THREE.Vector3( 0, -80, 0 ));
 
 	// fog effect
 	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
@@ -96,7 +97,7 @@ function createGround(){
 
 function createCar(){
 	car = new Car();
-	
+
 	// body
 	scene.add(car.body);
 

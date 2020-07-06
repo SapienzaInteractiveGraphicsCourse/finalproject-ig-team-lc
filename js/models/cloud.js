@@ -4,9 +4,10 @@ var Cloud = function(){
 	// create a container to hold different parts of the cloud
 	this.mesh = new THREE.Object3D();
 	var geometry = new THREE.SphereGeometry(20,40,40);
-	var material = new THREE.MeshPhongMaterial({
-		color:Colors.white,
-	});
+	var loader = new THREE.TextureLoader();
+	var material = new THREE.MeshPhongMaterial({ map: loader.load( "textures/clouds.jpg" )});
+	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+	material.map.repeat.set( 1, 1);
 
 	// create a random number of spheres
 	var nSpheres = 3+Math.floor(Math.random()*3);
