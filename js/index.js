@@ -91,7 +91,6 @@ var ground, car;
 function createGround(){
 	ground = new Ground();
 	ground.mesh.position.y = -1300;
-	ground.addIrregularities();
 	scene.add(ground.mesh);
 }
 

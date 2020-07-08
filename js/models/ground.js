@@ -34,17 +34,18 @@ var Ground = function(){
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set( 115, 6);
+	
+	// this.addIrregularities(geometry);
 
-	this.mesh = new Physijs.ConvexMesh(geometry, material,0);
-
+	this.mesh = new Physijs.ConvexMesh(geometry, material, 0);
 	// ground receive shadows
 	this.mesh.receiveShadow = true;
 }
 
 // function that simulate the ground irregularities
-Ground.prototype.addIrregularities = function (){
+Ground.prototype.addIrregularities = function (geometry){
 	// get the vertices
-	var verts = this.mesh.geometry.vertices;
+	var verts = geometry.vertices;
 	var l = verts.length;
 
 	for (var i=0; i<l; i++){
