@@ -91,6 +91,7 @@ var ground, car;
 function createGround(){
 	ground = new Ground();
 	ground.mesh.position.y = -1300;
+	//ground.addIrregularities();
 	scene.add(ground.mesh);
 }
 
@@ -99,7 +100,7 @@ function createCar(){
 
 	// body
 	scene.add(car.body);
-
+/*
 	// front left wheel
 	scene.add(car.wheel_fl);
 	var wheel_fl_constraint = new Physijs.DOFConstraint(
@@ -135,6 +136,7 @@ function createCar(){
 	scene.addConstraint( wheel_br_constraint );
 	wheel_br_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
 	wheel_br_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
+*/
 }
 
 var sky;
@@ -160,7 +162,7 @@ function init() {
 function loop(){
 	ground.mesh.__dirtyRotation = true;
 	ground.mesh.rotation.z += .0005*rotationSpeed;
-	sky.mesh.rotation.z += .00024*rotationSpeed;
+	sky.mesh.rotation.z += .00024;
 	scene.simulate();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);

@@ -1,60 +1,107 @@
 import { Colors } from '../colors.js';
 
-var Car = function() {
-	// Car
-	var car_material = Physijs.createMaterial(
-		new THREE.MeshPhongMaterial({ color: Colors.red }),
-		.8, // high friction
-		.2 // low restitution
-	);
-
-	var wheel_material = Physijs.createMaterial(
-		new THREE.MeshPhongMaterial({ color: Colors.brownDark }),
-		.8, // high friction
+const StartPos = new THREE.Vector3( -100, 25, 45 );
+const BodyGeom = new THREE.Vector3( 60, 15, 35 );
+const FWheelGeom = new THREE.Vector4( 7, 7, 5, 15 );
+const BWheelGeom = new THREE.Vector4( 8, 8, 5, 15 );
+//geometries constructors
+function createBoxPhys(x, y, z, posX, posY, posZ, color, transparentBool){
+	var geometry = new THREE.BoxGeometry(x, y, z);
+	var material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial({
+			color: color,
+			transparent: transparentBool
+		}),
+		.5, // medium friction
 		.5 // medium restitution
 	);
+	var box =  new Physijs.BoxMesh(geometry, material);
+	box.castShadow = box.receiveShadow = true;
+	box.position.set(posX, posY, posZ);
+	return box;
+}
+function createBox(x, y, z, posX, posY, posZ, color, transparentBool){
+	var geometry = new THREE.BoxGeometry(x, y, z);
+	var material = new THREE.MeshPhongMaterial({
+			color: color,
+			transparent: transparentBool
+		});
+	var box = new THREE.Mesh(geometry, material);
+	box.castShadow = box.receiveShadow = true;
+	box.position.set(posX, posY, posZ);
+	return box;
+}
 
-	var body_geometry = new THREE.CubeGeometry( 33, 20, 20 );
-	var wheel_geometry = new THREE.CylinderGeometry( 5, 5, 1, 8 );
+function createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color) {
+	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
+	var material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial({ color: color }),
+		.8, // medium friction
+		.2 // medium restitution
+	);
+	var cylinder = new Physijs.CylinderMesh(geometry, material, 1000);
+	cylinder.castShadow = cylinder.receiveShadow = true;
+	cylinder.position.set(posX, posY, posZ);
+	return cylinder;
+}
 
-	// body
-	this.body = new Physijs.BoxMesh(body_geometry, car_material, 5000);
-	this.body.position.x = -100;
-	this.body.position.y = 25;
-	this.body.position.z = 45;
-	this.body.receiveShadow = this.body.castShadow = true;
+function createCylinder(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color){
+	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
+	var material = new THREE.MeshPhongMaterial({ color: color });
+	var cylinder = new THREE.Mesh(geometry, material);
+	cylinder.castShadow = cylinder.receiveShadow = true;
+	cylinder.position.set(posX, posY, posZ);
+	return cylinder;
+}
 
-	// front left wheel
-	this.wheel_fl = new Physijs.CylinderMesh(wheel_geometry, wheel_material, 1000);
-	this.wheel_fl.rotation.x = Math.PI / 2;
-	this.wheel_fl.position.x = this.body.position.x + body_geometry.parameters.width/2;
-	this.wheel_fl.position.y = this.body.position.y - body_geometry.parameters.height/2;
-	this.wheel_fl.position.z = this.body.position.z - body_geometry.parameters.depth/2;
-	this.wheel_fl.receiveShadow = this.wheel_fl.castShadow = true;
+function createTire(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color) {
+	var cylinder = createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color);
+	cylinder.rotation.x = Math.PI / 2;
+	return cylinder;
+}
 
-	// front right wheel
-	this.wheel_fr = new Physijs.CylinderMesh(wheel_geometry, wheel_material, 1000);
-	this.wheel_fr.rotation.x = Math.PI / 2;
-	this.wheel_fr.position.x = this.body.position.x + body_geometry.parameters.width/2;
-	this.wheel_fr.position.y = this.body.position.y - body_geometry.parameters.height/2;
-	this.wheel_fr.position.z = this.body.position.z + body_geometry.parameters.depth/2;
-	this.wheel_fr.receiveShadow = this.wheel_fr.castShadow = true;
+function createCarLights(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color){
+	var cylinder = createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color);
+	cylinder.rotation.x = Math.PI / 2;
+	cylinder.rotation.y = Math.PI / 2;
+	return cylinder;
+}
 
-	// back left wheel
-	this.wheel_bl = new Physijs.CylinderMesh(wheel_geometry, wheel_material, 1000);
-	this.wheel_bl.rotation.x = Math.PI / 2;
-	this.wheel_bl.position.x = this.body.position.x - body_geometry.parameters.width/2;
-	this.wheel_bl.position.y = this.body.position.y - body_geometry.parameters.height/2;
-	this.wheel_bl.position.z = this.body.position.z - body_geometry.parameters.depth/2;
-	this.wheel_bl.receiveShadow = this.wheel_bl.castShadow = true;
+var Car = function() {
 
-	// back right wheel
-	this.wheel_br = new Physijs.CylinderMesh(wheel_geometry, wheel_material, 1000);
-	this.wheel_br.rotation.x = Math.PI / 2;
-	this.wheel_br.position.x = this.body.position.x - body_geometry.parameters.width/2;
-	this.wheel_br.position.y = this.body.position.y - body_geometry.parameters.height/2;
-	this.wheel_br.position.z = this.body.position.z + body_geometry.parameters.depth/2;
-	this.wheel_br.receiveShadow = this.wheel_br.castShadow = true;
+	var body = createBoxPhys( BodyGeom.x, BodyGeom.y, BodyGeom.z,
+		StartPos.x, StartPos.y, StartPos.z, Colors.red, false );
+
+	var roof = createBoxPhys( 0.6*BodyGeom.x, BodyGeom.y, BodyGeom.z*0.95,
+		-0.05*BodyGeom.x, BodyGeom.y, 0, Colors.red, false );
+	// wheels
+	var fl =  createTire(FWheelGeom.x, FWheelGeom.y, FWheelGeom.z/2, FWheelGeom.w,
+		+BodyGeom.x/2,
+		-BodyGeom.y/2,
+		-BodyGeom.z/2-FWheelGeom.z/2,
+		Colors.black);
+	var fr =  createTire(FWheelGeom.x, FWheelGeom.y, FWheelGeom.z/2, FWheelGeom.w,
+		+BodyGeom.x/2,
+		-BodyGeom.y/2,
+		+BodyGeom.z/2+FWheelGeom.z/2,
+		Colors.black);
+	var bl =  createTire(BWheelGeom.x, BWheelGeom.y, BWheelGeom.z/2, BWheelGeom.w,
+		-BodyGeom.x/2+BWheelGeom.x,
+		-BodyGeom.y/2,
+		-BodyGeom.z/2-BWheelGeom.z/2,
+		Colors.black);
+	var br =  createTire(BWheelGeom.x, BWheelGeom.y, BWheelGeom.z/2, BWheelGeom.w,
+		-BodyGeom.x/2+BWheelGeom.x,
+		-BodyGeom.y/2,
+		+BodyGeom.z/2+BWheelGeom.z/2,
+		Colors.black);
+
+	this.body = body;
+	this.body.add(roof);
+	this.body.add(fl);
+	this.body.add(fr);
+	this.body.add(bl);
+	this.body.add(br);
 };
 
 export { Car };
