@@ -1,6 +1,7 @@
 import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
+import { Tree } from './models/miscellaneous.js';
 
 Physijs.scripts.worker = './js/physijs_worker.js';
 // Physijs.scripts.ammo = '/js/ammo.js';
@@ -8,7 +9,7 @@ Physijs.scripts.worker = './js/physijs_worker.js';
 var scene,
 		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
-var rotationSpeed = 1;
+var rotationSpeed = 0;
 
 function createScene() {
 	HEIGHT = window.innerHeight;
@@ -86,7 +87,7 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-var ground, car;
+var ground, car, tree;
 
 function createGround(){
 	ground = new Ground();
@@ -147,6 +148,11 @@ function createSky(){
 	scene.add(sky.mesh);
 }
 
+function createTrees(){
+	tree = new Tree();
+	scene.add(tree.trunk);
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
@@ -156,6 +162,7 @@ function init() {
 	createGround();
 	createCar();
 	createSky();
+	createTrees();
 	loop();
 }
 
