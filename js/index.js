@@ -57,6 +57,47 @@ function createScene() {
 
 	// if resize, update camera and renderer size
 	window.addEventListener('resize', winResize, false);
+
+	window.addEventListener(
+		'keydown',
+		function( ev ) {
+			switch( ev.keyCode ) {
+				case 37:
+					// Left
+					rotationSpeed -= .5;
+					// car.wheel_fl_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
+					// car.wheel_fr_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
+					// car.wheel_fl_constraint.enableAngularMotor( 1 );
+					// car.wheel_fr_constraint.enableAngularMotor( 1 );
+					break;
+				
+				case 39:
+					// Right
+					rotationSpeed += .5;
+					// car.wheel_fl_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, -1, 200 );
+					// car.wheel_fr_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, -1, 200 );
+					// car.wheel_fl_constraint.enableAngularMotor( 1 );
+					// car.wheel_fr_constraint.enableAngularMotor( 1 );
+					break;
+				
+				case 38:
+					// Up
+					// car.wheel_bl_constraint.configureAngularMotor( 2, 1, 0, 5, 2000 );
+					// car.wheel_br_constraint.configureAngularMotor( 2, 1, 0, 5, 2000 );
+					// car.wheel_bl_constraint.enableAngularMotor( 2 );
+					// car.wheel_br_constraint.enableAngularMotor( 2 );
+					break;
+				
+				case 40:
+					// Down
+					// car.wheel_bl_constraint.configureAngularMotor( 2, 1, 0, -5, 2000 );
+					// car.wheel_br_constraint.configureAngularMotor( 2, 1, 0, -5, 2000 );
+					// car.wheel_bl_constraint.enableAngularMotor( 2 );
+					//car.wheel_br_constraint.enableAngularMotor( 2 );
+					break;
+			}
+		}
+	);
 }
 
 function winResize() {
@@ -154,6 +195,15 @@ function createSky(){
 function createTrees(){
 	tree = new Tree();
 	scene.add(tree.trunk);
+	// Constraints:
+	// base of tree to ground
+	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
+		tree.trunk.position.y - tree.trunk.geometry.parameters.height/2, 
+		tree.trunk.position.z ));
+	// top of tree to ground
+	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
+		tree.trunk.position.y + tree.trunk.geometry.parameters.height/2, 
+		tree.trunk.position.z ));
 }
 
 // call init function when window is loaded
@@ -174,7 +224,7 @@ function loop(){
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
 	scene.simulate();
-	controls.update();
+	// controls.update();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }
