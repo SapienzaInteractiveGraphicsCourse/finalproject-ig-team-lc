@@ -34,7 +34,7 @@ function createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, po
         .8, // medium friction
         .2 // medium restitution
     );
-    var cylinder = new Physijs.CylinderMesh(geometry, material, 0);
+    var cylinder = new Physijs.CylinderMesh(geometry, material);
     cylinder.castShadow = cylinder.receiveShadow = true;
     cylinder.position.set(posX, posY, posZ);
     return cylinder;
@@ -56,10 +56,13 @@ function createTrunk(radiusTop, radiusBottom , height, radialSegments, posX, pos
 }
 
 var Tree = function(){
-    var trunk = createCylinderPhys(5, 5 , 80, 12, 0, 25, 0, Colors.brown);
-
+    var trunk = createCylinderPhys(5, 5 , 80, 12, 0, 40, 0, Colors.brown);
     this.trunk = trunk;
-
 };
+
+Tree.prototype.addConstraint = function(_scene, object, position) {
+    var costraint = new Physijs.PointConstraint(this.trunk, object, position);
+	_scene.addConstraint( costraint );
+}
 
 export { Tree/*, Coin, Rock, Ramp*/ };
