@@ -10,20 +10,21 @@ var scene,
 		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
 var rotationSpeed = 0;
+var controls;
 
 function createScene() {
 	HEIGHT = window.innerHeight;
 	WIDTH = window.innerWidth;
 
 	scene = new Physijs.Scene;
-	scene.setGravity(new THREE.Vector3( 0, -80, 0 ));
+	scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
 
 	// fog effect
 	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
 
 	// camera
-	aspectRatio = WIDTH / HEIGHT;
 	fieldOfView = 60;
+	aspectRatio = WIDTH / HEIGHT;
 	nearPlane = 1;
 	farPlane = 10000;
 	camera = new THREE.PerspectiveCamera(
@@ -34,7 +35,7 @@ function createScene() {
 		);
 	camera.position.set(0, 50, 200);
 	camera.lookAt(0, 50, 0)
-	camera.up.set(0, 0, 1)
+	camera.up.set(0, 1, 0)
 
 	renderer = new THREE.WebGLRenderer({
 		// Allow transparency to show the gradient background
@@ -51,6 +52,8 @@ function createScene() {
 	// link renderer DOM element to container in html
 	container = document.getElementById('world');
 	container.appendChild(renderer.domElement);
+	controls = new THREE.OrbitControls( camera, renderer.domElement );
+	controls.update();
 
 	// if resize, update camera and renderer size
 	window.addEventListener('resize', winResize, false);
@@ -171,6 +174,7 @@ function loop(){
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
 	scene.simulate();
+	controls.update();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }
