@@ -34,7 +34,7 @@ function createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, po
         .8, // medium friction
         .2 // medium restitution
     );
-    var cylinder = new Physijs.CylinderMesh(geometry, material, 1000);
+    var cylinder = new Physijs.CylinderMesh(geometry, material, 0);
     cylinder.castShadow = cylinder.receiveShadow = true;
     cylinder.position.set(posX, posY, posZ);
     return cylinder;
