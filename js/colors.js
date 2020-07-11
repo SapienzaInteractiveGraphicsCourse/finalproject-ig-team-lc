@@ -6,6 +6,8 @@ const Colors = {
 	brownDark:0x23190f,
     blue:0x68c3c0,
     black:0x000000,
-    armyGreen: 0x4b5320
+    armyGreen: 0x4b5320,
+    window: 0xaccdee,
+    axle: 0x828383
 }
 export { Colors }

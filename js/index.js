@@ -70,7 +70,7 @@ function createScene() {
 					// car.wheel_fl_constraint.enableAngularMotor( 1 );
 					// car.wheel_fr_constraint.enableAngularMotor( 1 );
 					break;
-				
+
 				case 39:
 					// Right
 					rotationSpeed += .5;
@@ -79,7 +79,7 @@ function createScene() {
 					// car.wheel_fl_constraint.enableAngularMotor( 1 );
 					// car.wheel_fr_constraint.enableAngularMotor( 1 );
 					break;
-				
+
 				case 38:
 					// Up
 					// car.wheel_bl_constraint.configureAngularMotor( 2, 1, 0, 5, 2000 );
@@ -87,7 +87,7 @@ function createScene() {
 					// car.wheel_bl_constraint.enableAngularMotor( 2 );
 					// car.wheel_br_constraint.enableAngularMotor( 2 );
 					break;
-				
+
 				case 40:
 					// Down
 					// car.wheel_bl_constraint.configureAngularMotor( 2, 1, 0, -5, 2000 );
@@ -198,11 +198,11 @@ function createTrees(){
 	// Constraints:
 	// base of tree to ground
 	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
-		tree.trunk.position.y - tree.trunk.geometry.parameters.height/2, 
+		tree.trunk.position.y - tree.trunk.geometry.parameters.height/2,
 		tree.trunk.position.z ));
 	// top of tree to ground
 	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
-		tree.trunk.position.y + tree.trunk.geometry.parameters.height/2, 
+		tree.trunk.position.y + tree.trunk.geometry.parameters.height/2,
 		tree.trunk.position.z ));
 }
 

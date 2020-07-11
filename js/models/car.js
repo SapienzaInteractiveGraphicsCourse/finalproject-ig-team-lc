@@ -6,12 +6,14 @@ const RoofGeom = new THREE.Vector3(  0.65*BodyGeom.x, BodyGeom.y, 0.99*BodyGeom.
 const WheelGeom = new THREE.Vector4( 8, 8, 5, 15 );
 const CarMass = 5000;
 const WheelMass = 1000;
+const TireDistanceFactor = 1.2;
+
 //geometries constructors
 function createBoxPhys(x, y, z, posX, posY, posZ, color, mass){
 	var geometry = new THREE.BoxGeometry(x, y, z);
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
-			color: color,
+			color: color
 		}),
 		.5, // medium friction
 		.5 // medium restitution
@@ -21,10 +23,11 @@ function createBoxPhys(x, y, z, posX, posY, posZ, color, mass){
 	box.position.set(posX, posY, posZ);
 	return box;
 }
+
 function createBox(x, y, z, posX, posY, posZ, color){
 	var geometry = new THREE.BoxGeometry(x, y, z);
 	var material = new THREE.MeshPhongMaterial({
-			color: color,
+			color: color
 		});
 	var box = new THREE.Mesh(geometry, material);
 	box.castShadow = box.receiveShadow = true;
@@ -65,49 +68,69 @@ function createCarLights(radiusTop, radiusBottom , height, radialSegments, posX,
 	cylinder.rotation.z = Math.PI / 2;
 	return cylinder;
 }
+function createSpotLight(){
+
+}
 
 var Car = function() {
 
 	var body = createBoxPhys( BodyGeom.x, BodyGeom.y, BodyGeom.z,
 		StartPos.x, StartPos.y, StartPos.z, Colors.armyGreen, CarMass );
-
 	var roof = createBox( RoofGeom.x, RoofGeom.y, RoofGeom.z,
 		-BodyGeom.x/2+RoofGeom.x/2, BodyGeom.y, 0, Colors.armyGreen);
 	// wheels
 	var fl =  createTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
-		+BodyGeom.x/2,
+		+BodyGeom.x/2-WheelGeom.x,
 		-BodyGeom.y/2,
-		-BodyGeom.z/2-WheelGeom.z,
+		-BodyGeom.z/2-TireDistanceFactor*WheelGeom.z,
 		Colors.black);
 	var fr =  createTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
-		+BodyGeom.x/2,
+		+BodyGeom.x/2-WheelGeom.x,
 		-BodyGeom.y/2,
-		+BodyGeom.z/2+WheelGeom.z,
+		+BodyGeom.z/2+TireDistanceFactor*WheelGeom.z,
 		Colors.black,
 		WheelMass);
 	var bl =  createTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
 		-BodyGeom.x/2+WheelGeom.x,
 		-BodyGeom.y/2,
-		-BodyGeom.z/2-WheelGeom.z,
+		-BodyGeom.z/2-TireDistanceFactor*WheelGeom.z,
 		Colors.black,
 		WheelMass);
 	var br =  createTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
 		-BodyGeom.x/2+WheelGeom.x,
 		-BodyGeom.y/2,
-		+BodyGeom.z/2+WheelGeom.z,
+		+BodyGeom.z/2+TireDistanceFactor*WheelGeom.z,
 		Colors.black,
 		WheelMass);
 	var leftHeadLight = createCarLights(3,3, 1, 12,
 		BodyGeom.x/2, BodyGeom.y/2-3, -BodyGeom.z/2+3, Colors.white);
 	var rightHeadLight = createCarLights(3,3, 1, 12,
 		BodyGeom.x/2, BodyGeom.y/2-3, +BodyGeom.z/2-3, Colors.white);
-	var windshield = createBox(1, 0.85*RoofGeom.y, 0.9*RoofGeom.z, RoofGeom.x/2, 0, 0, Colors.white)
-	var leftWindow = createBox(0.4*RoofGeom.x, 0.8*RoofGeom.y, 1, RoofGeom.x/2-1.2*(0.4*RoofGeom.x)/2, 0, -RoofGeom.z/2, Colors.white);
-	var rightWindow = createBox(0.4*RoofGeom.x, 0.8*RoofGeom.y, 1, RoofGeom.x/2-1.2*(0.4*RoofGeom.x)/2, 0, RoofGeom.z/2, Colors.white);
-	var rearWindow = createBox(1, 0.7*RoofGeom.y, 0.7*RoofGeom.z, -RoofGeom.x/2, 0.05*RoofGeom.y, 0, Colors.white);
+	var windshield = createBox(1, 0.85*RoofGeom.y, 0.9*RoofGeom.z, RoofGeom.x/2, 0, 0, Colors.window)
+	var leftWindow = createBox(0.4*RoofGeom.x, 0.8*RoofGeom.y, 1, RoofGeom.x/2-1.2*(0.4*RoofGeom.x)/2, 0, -RoofGeom.z/2, Colors.window);
+	var rightWindow = createBox(0.4*RoofGeom.x, 0.8*RoofGeom.y, 1, RoofGeom.x/2-1.2*(0.4*RoofGeom.x)/2, 0, RoofGeom.z/2, Colors.window);
+	var rearWindow = createBox(1, 0.7*RoofGeom.y, 0.7*RoofGeom.z, -RoofGeom.x/2, 0.05*RoofGeom.y, 0, Colors.window);
 	var spareWheel = createCarLights(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
 		-BodyGeom.x/2-WheelGeom.z/2, BodyGeom.y/2, 0, Colors.black);
+	var frontAxle = createCylinder(WheelGeom.x/8, WheelGeom.y/8, 1.4*BodyGeom.z, WheelGeom.w,
+		BodyGeom.x/2-WheelGeom.x,
+		-BodyGeom.y/2,
+		0,
+		Colors.axle);
+	frontAxle.rotation.x = Math.PI/2;
+	var rearAxle = createCylinder(WheelGeom.x/8, WheelGeom.y/8, 1.4*BodyGeom.z, WheelGeom.w,
+		-BodyGeom.x/2+WheelGeom.x,
+		-BodyGeom.y/2,
+		0,
+		Colors.axle);
+	rearAxle.rotation.x = Math.PI/2;
+	var leftHeadLightLIGHT = new THREE.SpotLight(Colors.white, 2, 200, Math.PI/4);
+    leftHeadLightLIGHT.position.set(0, 1, 0);
+	var rightHeadLightLIGHT = new THREE.SpotLight(Colors.white, 2, 200, Math.PI/4);
+    rightHeadLightLIGHT.position.set(0, 1, 0);
 
+	leftHeadLightLIGHT.target.position.set(-30,-BodyGeom.x,0);
+	rightHeadLightLIGHT.target.position.set(-30,-BodyGeom.x,0);
 
 	this.body = body;
 	this.body.add(roof); // 0
@@ -115,13 +138,20 @@ var Car = function() {
 	this.body.add(fr);
 	this.body.add(bl);
 	this.body.add(br);
-	this.body.add(leftHeadLight);
+	this.body.add(leftHeadLight); // 5
 	this.body.add(rightHeadLight); // 6
 	this.body.add(spareWheel);
+	this.body.add(frontAxle);
+	this.body.add(rearAxle);
 	this.body.children[0].add(windshield);
 	this.body.children[0].add(leftWindow);
 	this.body.children[0].add(rightWindow);
 	this.body.children[0].add(rearWindow);
+	this.body.children[5].add(leftHeadLightLIGHT);
+	this.body.children[6].add(rightHeadLightLIGHT);
+	this.body.children[5].add(leftHeadLightLIGHT.target);
+	this.body.children[6].add(rightHeadLightLIGHT.target);
+	//this.body.children[0].children[6].add(rightHeadLightLIGHT);
 
 	// add name to body children to better mangage animation
 	this.body.name = "body";
