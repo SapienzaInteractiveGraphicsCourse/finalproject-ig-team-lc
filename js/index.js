@@ -1,7 +1,7 @@
 import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
-import { Tree } from './models/miscellaneous.js';
+import { Tree, Coin } from './models/miscellaneous.js';
 
 Physijs.scripts.worker = './js/physijs_worker.js';
 // Physijs.scripts.ammo = '/js/ammo.js';
@@ -131,7 +131,7 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-var ground, car, tree;
+var ground, car, tree, coin;
 
 function createGround(){
 	ground = new Ground();
@@ -206,6 +206,12 @@ function createTrees(){
 		tree.trunk.position.z ));
 }
 
+function createCoins(){
+	coin = new Coin();
+	scene.add(coin.coin);
+
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
@@ -216,6 +222,7 @@ function init() {
 	createCar();
 	createSky();
 	createTrees();
+	createCoins();
 	loop();
 }
 
@@ -223,6 +230,7 @@ function loop(){
 	ground.mesh.__dirtyRotation = true;
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
+	coin.coin.rotation.y += .05;
 	scene.simulate();
 	// controls.update();
 	renderer.render(scene, camera);

@@ -8,6 +8,7 @@ const Colors = {
     black:0x000000,
     roofGrey: 0x222222,
     armyGreen: 0x4b5320,
+    green: 0x228B22,
     window: 0xF1F6FC,
     axle: 0x828383
 }
