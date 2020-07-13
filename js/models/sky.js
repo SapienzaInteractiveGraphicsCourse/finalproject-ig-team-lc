@@ -16,7 +16,7 @@ var Sky = function(){
 
 		// rotation and position of each cloud
 		var angle = stepAngle*i;
-		var height = 1900 + Math.random()*200;
+		var height = 1550 + Math.random()*200;
 
 		// polar coordinates to cartesian coordinates
 		cloud.mesh.position.y = Math.sin(angle)*height;

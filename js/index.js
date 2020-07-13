@@ -1,7 +1,7 @@
 import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
-import { Tree, Coin } from './models/miscellaneous.js';
+import { Tree, Coin, Rock, Ramp } from './models/miscellaneous.js';
 
 Physijs.scripts.worker = './js/physijs_worker.js';
 // Physijs.scripts.ammo = '/js/ammo.js';
@@ -131,7 +131,7 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-var ground, car, tree, coin;
+var ground, car, tree, coin, rock, ramp;
 
 function createGround(){
 	ground = new Ground();
@@ -188,7 +188,7 @@ var sky;
 // push down sky to let clouds closer to the ground
 function createSky(){
 	sky = new Sky();
-	sky.mesh.position.y = -1650;
+	sky.mesh.position.y = -1300;
 	scene.add(sky.mesh);
 }
 
@@ -212,6 +212,16 @@ function createCoins(){
 
 }
 
+function createRocks(){
+	rock = new Rock();
+	scene.add(rock.rock);
+}
+
+function createRamp(){
+	ramp = new Ramp();
+	scene.add(ramp.ramp);
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
@@ -223,6 +233,8 @@ function init() {
 	createSky();
 	createTrees();
 	createCoins();
+	createRocks();
+	createRamp();
 	loop();
 }
 
