@@ -6,9 +6,9 @@ import { Tree, Coin, Rock, Ramp } from './models/miscellaneous.js';
 Physijs.scripts.worker = './js/physijs_worker.js';
 // Physijs.scripts.ammo = '/js/ammo.js';
 
-var scene,
-		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
-		renderer, container;
+const GroundStart = -1300;
+var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane,
+	HEIGHT, WIDTH, renderer, container;
 var rotationSpeed = 0;
 var controls;
 
@@ -131,12 +131,61 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-var ground, car, tree, coin, rock, ramp;
+var ground, car, sky, tree, forest, coin, rock, ramp;
 
 function createGround(){
 	ground = new Ground();
 	ground.mesh.position.y = -1300;
-	//ground.addIrregularities();
+
+	var nTrees = 20;
+	var stepAngle = 2*Math.PI / nTrees;
+	for(var i=0; i<nTrees; i++){
+		tree = new Tree();
+		var angle = stepAngle*i;
+		var height = 1300 + tree.trunk.geometry.parameters.height/2;
+		tree.trunk.position.x = Math.cos(angle)*height;
+		tree.trunk.position.y = (Math.sin(angle)*height)-1300;
+		tree.trunk.position.z = Math.random() * -(340 - 60) - 60; // trees distributed on ground cylinder height: 350
+		tree.trunk.rotation.z = angle - Math.PI/2;
+		//var scale = 0.7+Math.random()*1.2;
+		//tree.trunk.scale.set(scale,scale,scale);
+		ground.mesh.attach(tree.trunk);
+
+	}
+
+	var nRocks = 7;
+	var stepAngle = 2*Math.PI / nRocks;
+	for(var i=0; i<nRocks; i++){
+		rock = new Rock();
+		var angle = stepAngle*i;
+		var height = 1300;
+		rock.rock.position.x = Math.cos(angle)*height;
+		rock.rock.position.y = (Math.sin(angle)*height)-1300;
+		rock.rock.position.z = Math.random() * -(340 - 60) - 60;
+		rock.rock.rotation.z = angle - Math.PI/2;
+		//var scale = 0.7+Math.random()*1;
+		//rock.rock.scale.set(scale,scale,scale);
+
+		ground.mesh.attach(rock.rock);
+	}
+
+/*
+	var nCoins = 12;
+	var stepAngle = 2*Math.PI / nCoins;
+	for(var i=0; i<nCoins; i++){
+		coin = new Coin();
+		var angle = stepAngle*i;
+		var height = 1300 + coin.coin.geometry.parameters.radiusTop;
+		coin.coin.position.x = Math.cos(angle)*height;
+		coin.coin.position.y = (Math.sin(angle)*height)-1300;
+		coin.coin.position.z = 0;
+		coin.coin.rotation.y = angle - Math.PI/2;
+		//var scale = 0.7+Math.random()*1;
+		//rock.rock.scale.set(scale,scale,scale);
+
+		ground.mesh.attach(coin.coin);
+	}
+*/
 	scene.add(ground.mesh);
 }
 
@@ -183,8 +232,6 @@ function createCar(){
 	wheel_br_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
 */
 }
-
-var sky;
 // push down sky to let clouds closer to the ground
 function createSky(){
 	sky = new Sky();
@@ -192,18 +239,66 @@ function createSky(){
 	scene.add(sky.mesh);
 }
 
-function createTrees(){
-	tree = new Tree();
-	scene.add(tree.trunk);
-	// Constraints:
+function createForest(){
+	//forest = new Forest();
+	/*
+	var nTrees = 20;
+	var stepAngle = Math.random() * ((2*Math.PI / nTrees) - 0.05) + 0.05; // max ~ 0.15
+	for(var i=0; i<nTrees; i++){
+		var tree = new Tree();
+		var angle = stepAngle*i;
+		var height = 1300 + tree.trunk.geometry.parameters.height/2;
+		tree.trunk.position.x = Math.cos(angle)*height;
+		tree.trunk.position.y = (Math.sin(angle)*height)-1300;
+		tree.trunk.position.z = Math.random() * -(340 - 60) + 60; // trees distributed on ground cylinder height: 350
+		tree.trunk.rotation.z = angle - Math.PI/2;
+		//var scale = 0.7+Math.random()*1.2;
+		//tree.trunk.scale.set(scale,scale,scale);
+		ground.mesh.add(tree.trunk);
+
+		// base of tree to ground
+		tree.addConstraint(scene, ground.mesh,
+			new THREE.Vector3(
+				tree.trunk.position.x,
+				tree.trunk.position.y - tree.trunk.geometry.parameters.height/2,
+				tree.trunk.position.z
+			)
+		);
+		// top of tree to ground
+		tree.addConstraint(scene, ground.mesh,
+			new THREE.Vector3(
+				tree.trunk.position.x,
+				tree.trunk.position.y + tree.trunk.geometry.parameters.height/2,
+				tree.trunk.position.z
+			)
+		);
+
+	}
+*/
+	//forest.forest.position.y = -1300;
+	//scene.add(forest.forest);
+
+
+/*
+	for( var i = 0; i < forest.nTrees; i++){
+		forest.forest.children[i].addConstraint(scene, ground.mesh, new THREE.Vector3( forest.forest.children[i].position.x,
+			forest.forest.children[i].position.y - forest.forest.children[i].geometry.parameters.height/2,
+			forest.forest.children[i].position.z ));
+		forest.forest.children[i].addConstraint(scene, ground.mesh, new THREE.Vector3( forest.children[i].position.x,
+			forest.forest.children[i].position.y + forest.forest.children[i].geometry.parameters.height/2,
+			forest.forest.children[i].position.z ));
+	}
+*/
+/*
 	// base of tree to ground
 	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
 		tree.trunk.position.y - tree.trunk.geometry.parameters.height/2,
 		tree.trunk.position.z ));
 	// top of tree to ground
-	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
+	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( forest.trunk.position.x,
 		tree.trunk.position.y + tree.trunk.geometry.parameters.height/2,
 		tree.trunk.position.z ));
+*/
 }
 
 function createCoins(){
@@ -212,14 +307,15 @@ function createCoins(){
 
 }
 
-function createRocks(){
+/*function createRocks(){
 	rock = new Rock();
 	scene.add(rock.rock);
-}
+}*/
 
 function createRamp(){
 	ramp = new Ramp();
 	scene.add(ramp.ramp);
+	ramp.ramp.position.z = 0;
 }
 
 // call init function when window is loaded
@@ -231,9 +327,9 @@ function init() {
 	createGround();
 	createCar();
 	createSky();
-	createTrees();
+//	createForest();
 	createCoins();
-	createRocks();
+//	createRocks();
 	createRamp();
 	loop();
 }
@@ -243,8 +339,9 @@ function loop(){
 	ground.mesh.rotation.z += .0005*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
 	coin.coin.rotation.y += .05;
+
 	scene.simulate();
-	// controls.update();
+	controls.update();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }

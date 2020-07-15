@@ -10,6 +10,7 @@ const Colors = {
     armyGreen: 0x4b5320,
     green: 0x228B22,
     window: 0xF1F6FC,
-    axle: 0x828383
+    axle: 0x828383,
+    woodRamp: 0xffa54f
 }
 export { Colors }

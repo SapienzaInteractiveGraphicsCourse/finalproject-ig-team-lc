@@ -1,8 +1,10 @@
 import { Cloud } from './cloud.js';
 
+const CloudHeight = 1500;
+
 var Sky = function(){
 	// container
-	this.mesh = new THREE.Object3D();
+	this.mesh = new THREE.Group();
 
 	// number of clouds
 	this.nClouds = 50;
@@ -16,7 +18,7 @@ var Sky = function(){
 
 		// rotation and position of each cloud
 		var angle = stepAngle*i;
-		var height = 1550 + Math.random()*200;
+		var height = CloudHeight + Math.random()*200;
 
 		// polar coordinates to cartesian coordinates
 		cloud.mesh.position.y = Math.sin(angle)*height;

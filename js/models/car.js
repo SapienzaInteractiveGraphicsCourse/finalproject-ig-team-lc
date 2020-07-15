@@ -1,15 +1,15 @@
 import { Colors } from '../colors.js';
 
-const StartPos = new THREE.Vector3( -100, 25, 45 );
-const BodyGeom = new THREE.Vector3( 60, 15, 35 );
-const RoofGeom = new THREE.Vector3(  0.65*BodyGeom.x, BodyGeom.y, 0.99*BodyGeom.z );
-const WheelGeom = new THREE.Vector4( 8, 8, 5, 17 );
-const DoorGeom = new THREE.Vector3(0.4*RoofGeom.x, 0.9*BodyGeom.y, 2);
-const HandleGeom = new THREE.Vector3(5, 1, 2);
-const WheelRimGeom = new THREE.Vector4(0.6*WheelGeom.x, 0.6*WheelGeom.y, WheelGeom.z/6, WheelGeom.w);
-const CarMass = 5000;
-const WheelMass = 1000;
-const TireDistanceFactor = 1.2;
+const StartPos = new THREE.Vector3( -100, 25, 0 ),
+	BodyGeom = new THREE.Vector3( 60, 15, 35 ),
+	RoofGeom = new THREE.Vector3(  0.65*BodyGeom.x, BodyGeom.y, 0.99*BodyGeom.z ),
+	WheelGeom = new THREE.Vector4( 8, 8, 5, 17 ),
+	DoorGeom = new THREE.Vector3(0.4*RoofGeom.x, 0.9*BodyGeom.y, 2),
+	HandleGeom = new THREE.Vector3(5, 1, 2),
+	WheelRimGeom = new THREE.Vector4(0.6*WheelGeom.x, 0.6*WheelGeom.y, WheelGeom.z/6, WheelGeom.w),
+	CarMass = 5000,
+	WheelMass = 1000,
+	TireDistanceFactor = 1.2;
 
 var loader = new THREE.TextureLoader();
 
@@ -211,19 +211,19 @@ var Car = function() {
 
 	//Wheel Rims
 	var fl_WheelRim = createRimTex(WheelRimGeom.x, WheelRimGeom.y, WheelRimGeom.z, WheelRimGeom.w,
-		0, -WheelGeom.z/2, 0, 'wheelRim.png');
+		0, -WheelGeom.z/2, 0, 'wheelRim.jpg');
 	fl_WheelRim.rotation.x = Math.PI;
 	var fr_WheelRim = createRimTex(WheelRimGeom.x, WheelRimGeom.y, WheelRimGeom.z, WheelRimGeom.w,
-		0, WheelGeom.z/2, 0, 'wheelRim.png');
+		0, WheelGeom.z/2, 0, 'wheelRim.jpg');
 	fr_WheelRim.rotation.x = Math.PI;
 	var bl_WheelRim = createRimTex(WheelRimGeom.x, WheelRimGeom.y, WheelRimGeom.z, WheelRimGeom.w,
-		0, -WheelGeom.z/2, 0, 'wheelRim.png');
+		0, -WheelGeom.z/2, 0, 'wheelRim.jpg');
 	bl_WheelRim.rotation.x = Math.PI;
 	var br_WheelRim = createRimTex(WheelRimGeom.x, WheelRimGeom.y, WheelRimGeom.z, WheelRimGeom.w,
-		0, WheelGeom.z/2, 0, 'wheelRim.png');
+		0, WheelGeom.z/2, 0, 'wheelRim.jpg');
 	br_WheelRim.rotation.x = Math.PI;
 	var spare_WheelRim = createRimTex(WheelRimGeom.x, WheelRimGeom.y, WheelRimGeom.z, WheelRimGeom.w,
-		0, WheelGeom.z/2, 0, 'wheelRim.png');
+		0, WheelGeom.z/2, 0, 'wheelRim.jpg');
 	spare_WheelRim.rotation.y = Math.PI/2;
 	spare_WheelRim.rotation.z = Math.PI/2;
 
@@ -285,24 +285,7 @@ var Car = function() {
 	this.body.children[10].name = "leftHandle";
 	this.body.children[11].name = "rightHandle";
 
-
-
-console.log(this.body);
-	//console.log("1" + this.body);
-	//console.log("2",this.body.children[0]);
-
-/*
-	this.body.children[0].name = "roof";
-	this.body.children[1].name = "fl";
-	this.body.children[2].name = "fr";
-	this.body.children[3].name = "bl";
-	this.body.children[0].name = "br";
-	this.body.children[0].name = "leftHeadLight";
-	this.body.children[0].name = "rightHeadLight";
-	this.body.children[0].add(windshield)
-*/
-
-
+console.log("Car:",this.body);
 };
 
 export { Car };

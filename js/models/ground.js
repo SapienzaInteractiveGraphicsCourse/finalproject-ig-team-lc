@@ -28,13 +28,18 @@ var Ground = function(){
 	// material
 	var loader = new THREE.TextureLoader();
 	var material = Physijs.createMaterial(
-		new THREE.MeshPhongMaterial({ map: loader.load( 'textures/ground.png' ) }),
-		2, // high friction
-		.5 // low restitution
+		new THREE.MeshPhongMaterial({
+			map: loader.load( 'textures/ground.png' ),
+			bumpMap: loader.load( 'textures/groundBump.png')
+		}),
+		.8, //  friction
+		.5 //  restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set( 115, 6);
-	
+	material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	material.bumpMap.repeat.set(115, 6);
+
 	// this.addIrregularities(geometry);
 
 	this.mesh = new Physijs.ConvexMesh(geometry, material, 0);
