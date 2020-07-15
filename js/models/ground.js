@@ -3,7 +3,7 @@ import { Colors } from '../colors.js';
 var Ground = function(){
 
 	// create ground cylinder;
-	var geometry = new THREE.CylinderGeometry(1300,1300,700,100,10);
+	var geometry = new THREE.CylinderGeometry(1300,1300,700,100,10, true);
 
 	// rotate on x axis
 	geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI/2));
