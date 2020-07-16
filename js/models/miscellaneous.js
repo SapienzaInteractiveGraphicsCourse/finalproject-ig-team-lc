@@ -114,15 +114,15 @@ function createTrunkPhys(radiusTop, radiusBottom , height, radialSegments, posX,
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
 			map: loader.load( 'textures/'+texture ),
-			bumpMap: loader.load( 'textures/trunkBump.png')
+			//bumpMap: loader.load( 'textures/trunkBump.png')
 		}),
 		.8, // high friction
 		.2 // low restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set(4, 3);
-	material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	material.bumpMap.repeat.set(4, 3);
+	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	//material.bumpMap.repeat.set(4, 3);
 	var trunk = new Physijs.CylinderMesh(geometry, material, mass);
 	trunk.castShadow = trunk.receiveShadow = true;
 	trunk.position.set(posX, posY, posZ);
@@ -132,12 +132,12 @@ function createTrunk(radiusTop, radiusBottom , height, radialSegments, posX, pos
 	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
 	var material = new THREE.MeshPhongMaterial({
 			map: loader.load( 'textures/'+texture ),
-			bumpMap: loader.load( 'textures/trunkBump.png')
+			//bumpMap: loader.load( 'textures/trunkBump.png')
 		});
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set(4, 3);
-	material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	material.bumpMap.repeat.set(4, 3);
+	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	//material.bumpMap.repeat.set(4, 3);
 	var trunk = new THREE.Mesh(geometry, material);
 	trunk.castShadow = trunk.receiveShadow = true;
 	trunk.position.set(posX, posY, posZ);
@@ -145,6 +145,22 @@ function createTrunk(radiusTop, radiusBottom , height, radialSegments, posX, pos
 }
 
 function createCrown(radius, detail, posX, posY, posZ, texture){
+    var geometry = new THREE.IcosahedronGeometry(radius, detail);
+    var material = new THREE.MeshPhongMaterial({
+		map: loader.load( 'textures/'+texture ),
+	 	//bumpMap: loader.load( 'textures/crownBump.jpg')
+	});
+    material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+    material.map.repeat.set( 3, 3);
+	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	//material.bumpMap.repeat.set(3, 3);
+    var dodecahedron = new THREE.Mesh( geometry, material );
+    dodecahedron.castShadow = dodecahedron.receiveShadow = true;
+	dodecahedron.position.set(posX, posY, posZ);
+	return dodecahedron;
+}
+
+function createCrown2(radius, detail, posX, posY, posZ, texture){
     var geometry = new THREE.IcosahedronGeometry(radius, detail);
     var material = new THREE.MeshPhongMaterial({
 		map: loader.load( 'textures/'+texture ),
@@ -165,15 +181,15 @@ function createRock(radius, detail, posX, posY, posZ, texture){
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
 			map: loader.load( 'textures/'+texture ),
-			bumpMap: loader.load( 'textures/rockBump.jpg')
+			//bumpMap: loader.load( 'textures/rockBump.jpg')
 		}),
 		.5, //  friction
 		.5 //  restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
     material.map.repeat.set( 1, 1);
-	material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	material.bumpMap.repeat.set(1, 1);
+	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	//material.bumpMap.repeat.set(1, 1);
     var rock = new Physijs.ConvexMesh( geometry, material, 0);
     rock.castShadow = rock.receiveShadow = true;
 	rock.position.set(posX, posY, posZ);
@@ -185,52 +201,35 @@ function createCoin(radiusTop, radiusBottom , height, radialSegments, posX, posY
 	var material = new THREE.MeshStandardMaterial({
 		map: loader.load( 'textures/'+texture )
 	});
+    material.map.rotation = Math.PI /2;
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set( 1, 1);
 	var coin = new THREE.Mesh(geometry, material);
 	coin.castShadow = coin.receiveShadow = true;
 	coin.position.set(posX, posY, posZ);
-    coin.rotation.z = Math.PI / 2;
-    coin.rotation.y = Math.PI / 2;
+    //coin.rotation.x = Math.PI / 2;
 	return coin;
 }
 
 function createRamp(posX, posY, posZ, color){
-	/*
-    var rampShape = new THREE.Shape();
-	rampShape.moveTo(0, 0);
-	rampShape.lineTo(200, 70);
-    rampShape.moveTo(200, 70);
-    rampShape.lineTo(200, 0);
-	rampShape.moveTo(200, 0);
-	rampShape.lineTo(0, 0);
-	var extrudeSettings = {
-		steps: 2,
-		depth: 120,
-		bevelEnabled: true,
-		bevelThickness: 1,
-		bevelSize: 1,
-		bevelOffset: 0,
-		bevelSegments: 1
-	};
-    */
 	var geometry = new THREE.BoxGeometry( 300, 100, 100 );
     geometry.vertices[4] = geometry.vertices[6];
     geometry.vertices[5] = geometry.vertices[7];
-	var material = new THREE.MeshPhongMaterial({ map: loader.load( 'textures/ramp.jpg' ) });
-	/*var material = Physijs.createMaterial(
-		new THREE.MeshPhongMaterial({ map: loader.load( 'textures/'+texture ) }),
+	//var material = new THREE.MeshPhongMaterial({ map: loader.load( 'textures/ramp.jpg' ) });
+	var material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial({ map: loader.load( 'textures/ramp.jpg' ) }),
 		.5, //  friction
 		.5 //  restitution
-	);*/
+	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
     material.map.repeat.set( 15, 1);
-	var ramp = new Physijs.ConvexMesh( geometry, material, 0);
+	var ramp = new Physijs.BoxMesh( geometry, material, 0);
 	ramp.castShadow = ramp.receiveShadow = true;
 	ramp.position.set(posX, posY, posZ);
 	return ramp;
 }
 
+/*
 var Tree = function(){
     var trunk = createTrunk(TrunkGeom.x, TrunkGeom.y , TrunkGeom.z, TrunkGeom.w,
         0, 40, 0, 'trunk.jpg');
@@ -258,6 +257,35 @@ var Tree = function(){
     this.trunk.children[0].add(crown6);
     this.trunk.children[0].add(crown7);
 };
+*/
+var Tree = function(){
+    var trunk = createTrunkPhys(TrunkGeom.x, TrunkGeom.y , TrunkGeom.z, TrunkGeom.w,
+        0, 40, 0, 'trunk.jpg', 0);
+    var crown1 = createCrown(CrownGeom.x, CrownGeom.y,
+        0, TrunkGeom.z/2+CrownGeom.x/2, 0, 'crown.jpg');
+    var crown2 = createCrown(0.8*CrownGeom.x, CrownGeom.y,
+        0.8*CrownGeom.x/2, 0.8*CrownGeom.x/2, -CrownGeom.x/2, 'crown.jpg');
+    var crown3 = createCrown(0.8*CrownGeom.x, CrownGeom.y,
+        -0.8*CrownGeom.x/2, 0.6*CrownGeom.x/2, +CrownGeom.x/2, 'crown.jpg');
+    var crown4 = createCrown(0.8*CrownGeom.x, CrownGeom.y,
+        0, 0.8*CrownGeom.x, 0, 'crown.jpg');
+    var crown5 = createCrown(0.7*CrownGeom.x, CrownGeom.y,
+        0.8*CrownGeom.x/2, 0.8*CrownGeom.x/2, 0.8*CrownGeom.x/2, 'crown.jpg');
+    var crown6 = createCrown(0.6*CrownGeom.x, CrownGeom.y,
+        -CrownGeom.x/2, 0.6*CrownGeom.x/2, -CrownGeom.x/2, 'crown.jpg');
+    var crown7 = createCrown(0.6*CrownGeom.x, CrownGeom.y,
+        -0.6*CrownGeom.x/2, -CrownGeom.x/2, 0.6*CrownGeom.x/2, 'crown.jpg');
+
+    this.trunk = trunk;
+    this.trunk.add(crown1);
+    this.trunk.children[0].add(crown2);
+    this.trunk.children[0].add(crown3);
+    this.trunk.children[0].add(crown4);
+    this.trunk.children[0].add(crown5);
+    this.trunk.children[0].add(crown6);
+    this.trunk.children[0].add(crown7);
+};
+
 
 Tree.prototype.addConstraint = function(_scene, object, position) {
     var costraint = new Physijs.PointConstraint(this.trunk, object, position);
