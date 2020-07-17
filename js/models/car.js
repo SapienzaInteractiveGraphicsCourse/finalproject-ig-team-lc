@@ -1,6 +1,6 @@
 import { Colors } from '../colors.js';
 
-const StartPos = new THREE.Vector3( -100, 25, 0 ),
+const StartPos = new THREE.Vector3( -100, 45, 0 ),
 	BodyGeom = new THREE.Vector3( 60, 15, 35 ),
 	RoofGeom = new THREE.Vector3(  0.65*BodyGeom.x, BodyGeom.y, 0.99*BodyGeom.z ),
 	WheelGeom = new THREE.Vector4( 8, 8, 5, 17 ),
