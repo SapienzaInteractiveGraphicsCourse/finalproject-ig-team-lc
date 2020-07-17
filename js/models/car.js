@@ -129,7 +129,7 @@ function createCarLights(radiusTop, radiusBottom , height, radialSegments, posX,
 	return cylinder;
 }
 
-var Car = function() {
+var Car = function(scene) {
 
 	var body = createBoxPhys( BodyGeom.x, BodyGeom.y, BodyGeom.z,
 		StartPos.x, StartPos.y, StartPos.z, CarMass, Colors.armyGreen );
@@ -228,6 +228,7 @@ var Car = function() {
 	spare_WheelRim.rotation.z = Math.PI/2;
 
 	this.body = body;
+	this.fl = fl;
 	this.body.add(roof); // 0
 	this.body.add(fl);
 	this.body.add(fr);
@@ -284,6 +285,11 @@ var Car = function() {
 	this.body.children[7].name = "TARGETrightHeadLightLIGHT";
 	this.body.children[10].name = "leftHandle";
 	this.body.children[11].name = "rightHandle";
+
+	this.fl.position.x = this.body.position.x + this.fl.position.x;
+	this.fl.position.y = this.body.position.y + this.fl.position.y;
+	this.fl.position.z = this.body.position.z + this.fl.position.z;
+	scene.add(this.fl);
 
 console.log("Car:",this.body);
 };

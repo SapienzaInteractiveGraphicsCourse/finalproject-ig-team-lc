@@ -66,10 +66,10 @@ function createScene() {
 				case 37:
 					// Left
 					rotationSpeed -= .5;
-					// car.wheel_fl_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
-					// car.wheel_fr_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
-					// car.wheel_fl_constraint.enableAngularMotor( 1 );
-					// car.wheel_fr_constraint.enableAngularMotor( 1 );
+					car.fl_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
+					// car.fr_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
+					car.fl_constraint.enableAngularMotor( 1 );
+					// car.fr_constraint.enableAngularMotor( 1 );
 					break;
 
 				case 39:
@@ -231,47 +231,56 @@ function createGround(){
 }
 
 function createCar(){
-	car = new Car();
+	car = new Car(scene);
 	// body
 	scene.add(car.body);
-/*
+
+	car.fl_constraint = new Physijs.DOFConstraint(
+		car.fl, car.body, new THREE.Vector3(car.fl.position.x, car.fl.position.y, car.fl.position.z)
+	);
+	scene.addConstraint( car.fl_constraint );
+
 	// front left wheel
-	scene.add(car.wheel_fl);
-	var wheel_fl_constraint = new Physijs.DOFConstraint(
-		car.wheel_fl, car.body, new THREE.Vector3(car.wheel_fl.position.x, car.wheel_fl.position.y, car.wheel_fl.position.z)
+	var fl_constraint = new Physijs.DOFConstraint(
+		car.fl, car.body, new THREE.Vector3(car.fl.position.x, car.fl.position.y, car.fl.position.z)
 	);
-	scene.addConstraint( wheel_fl_constraint );
-	wheel_fl_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
-	wheel_fl_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
-
+	scene.addConstraint( fl_constraint );
+	fl_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
+	fl_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
+	
 	// front right wheel
-	scene.add(car.wheel_fr);
-	var wheel_fr_constraint = new Physijs.DOFConstraint(
-		car.wheel_fr, car.body, new THREE.Vector3(car.wheel_fr.position.x, car.wheel_fr.position.y, car.wheel_fr.position.z)
-	);
-	scene.addConstraint( wheel_fr_constraint );
-	wheel_fr_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
-	wheel_fr_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
+	// var fr_index = car.body.children.findIndex(children => children.name == "fr_WheelRim");
+	// var fr = car.body.children[fr_index];
+	// fr.position.x = car.body.position.x + fr.position.x;
+	// fr.position.y = car.body.position.y + fr.position.y;
+	// fr.position.z = car.body.position.z + fr.position.z;
+	// scene.add(fr);
+	// var fr_constraint = new Physijs.DOFConstraint(
+	// 	fr, car.body, new THREE.Vector3(fr.position.x, fr.position.y, fr.position.z)
+	// );
+	// scene.addConstraint( fr_constraint );
+	// fr_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
+	// fr_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
 
-	// back left wheel
-	scene.add(car.wheel_bl);
-	var wheel_bl_constraint = new Physijs.DOFConstraint(
-		car.wheel_bl, car.body, new THREE.Vector3(car.wheel_bl.position.x, car.wheel_bl.position.y, car.wheel_bl.position.z)
-	);
-	scene.addConstraint( wheel_bl_constraint );
-	wheel_bl_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
-	wheel_bl_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
+	// // back left wheel
+	// scene.add(car.wheel_bl);
+	// var wheel_bl_constraint = new Physijs.DOFConstraint(
+	// 	car.wheel_bl, car.body, new THREE.Vector3(car.wheel_bl.position.x, car.wheel_bl.position.y, car.wheel_bl.position.z)
+	// );
+	// scene.addConstraint( wheel_bl_constraint );
+	// wheel_bl_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
+	// wheel_bl_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
 
-	// back right wheel
-	scene.add(car.wheel_br);
-	var wheel_br_constraint = new Physijs.DOFConstraint(
-		car.wheel_br, car.body, new THREE.Vector3(car.wheel_br.position.x, car.wheel_br.position.y, car.wheel_br.position.z)
-	);
-	scene.addConstraint( wheel_br_constraint );
-	wheel_br_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
-	wheel_br_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
-*/
+	// // back right wheel
+	// scene.add(car.wheel_br);
+	// var wheel_br_constraint = new Physijs.DOFConstraint(
+	// 	car.wheel_br, car.body, new THREE.Vector3(car.wheel_br.position.x, car.wheel_br.position.y, car.wheel_br.position.z)
+	// );
+	// scene.addConstraint( wheel_br_constraint );
+	// wheel_br_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
+	// wheel_br_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
 }
+
 // push down sky to let clouds closer to the ground
 function createSky(){
 	sky = new Sky();
