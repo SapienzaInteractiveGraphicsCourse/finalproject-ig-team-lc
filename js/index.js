@@ -12,6 +12,7 @@ var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane,
 var rotationSpeed = 0;
 var controls;
 var axesHelper = new THREE.AxesHelper( 30 );
+var steering = false;
 
 function createScene() {
 	HEIGHT = window.innerHeight;
@@ -72,18 +73,28 @@ function createScene() {
 
 				case 38:
 					// Up: turn left
+					steering = true;
 					car.body.__dirtyRotation = true;
 					car.body.__dirtyPosition = true;
-					car.body.rotation.y += .05;
-					car.body.position.z -= 5;
+					car.body.children[1].rotation.y = 0;
+					car.body.children[2].rotation.y = 0;
+					car.body.children[1].rotation.z = -.5;
+					car.body.children[2].rotation.z = -.5;
+					car.body.rotation.y = .2;
+					car.body.position.z -= 10;
 					break;
 
 				case 40:
-					// Down: turn to right
+					// Down: turn right
+					steering = true;
 					car.body.__dirtyRotation = true;
 					car.body.__dirtyPosition = true;
-					car.body.rotation.y -= .05;
-					car.body.position.z += 5;
+					car.body.children[1].rotation.y = 0;
+					car.body.children[2].rotation.y = 0;
+					car.body.children[1].rotation.z = .5;
+					car.body.children[2].rotation.z = .5;
+					car.body.rotation.y = -.2;
+					car.body.position.z += 10;
 					break;
 			}
 		}
@@ -96,6 +107,23 @@ function createScene() {
 				case 39:
 					// Right: stop
 					rotationSpeed = .5;
+					break;
+				case 38:
+					// Up: turn left
+					steering = false;
+					car.body.__dirtyRotation = true;
+					car.body.children[1].rotation.z = 0;
+					car.body.children[2].rotation.z = 0;
+					car.body.rotation.y = 0;
+					break;
+
+				case 40:
+					// Down: turn right
+					steering = false;
+					car.body.__dirtyRotation = true;
+					car.body.children[1].rotation.z = 0;
+					car.body.children[2].rotation.z = 0;
+					car.body.rotation.y = 0;
 					break;
 			}
 		}
@@ -370,8 +398,10 @@ function loop(){
 	//ramp.ramp.__dirtyRotation = true;
 	ground.mesh.rotation.z += .001*rotationSpeed; // lower speed make car pass through tree meshes
 	forest.mesh.rotation.z += .001*rotationSpeed;
-	car.body.children[1].rotation.y -= .1*rotationSpeed;
-	car.body.children[2].rotation.y -= .1*rotationSpeed;
+	if (!steering) {
+		car.body.children[1].rotation.y -= .1*rotationSpeed;
+		car.body.children[2].rotation.y -= .1*rotationSpeed;
+	}
 	car.body.children[3].rotation.y -= .1*rotationSpeed;
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
