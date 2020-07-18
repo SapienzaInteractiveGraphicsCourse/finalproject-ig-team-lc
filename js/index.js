@@ -63,38 +63,43 @@ function createScene() {
 		'keydown',
 		function( ev ) {
 			switch( ev.keyCode ) {
-				case 37:
-					// Left
-					rotationSpeed -= .5;
-					car.fl_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
-					// car.fr_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, 1, 200 );
-					car.fl_constraint.enableAngularMotor( 1 );
-					// car.fr_constraint.enableAngularMotor( 1 );
-					break;
-
 				case 39:
-					// Right
-					rotationSpeed += .5;
-					// car.wheel_fl_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, -1, 200 );
-					// car.wheel_fr_constraint.configureAngularMotor( 1, -Math.PI / 2, Math.PI / 2, -1, 200 );
-					// car.wheel_fl_constraint.enableAngularMotor( 1 );
-					// car.wheel_fr_constraint.enableAngularMotor( 1 );
+					// Right arrow: start
+					if (rotationSpeed < 1.5) {
+						rotationSpeed += .5;
+					}
 					break;
 
 				case 38:
-					// Up
-					// car.wheel_bl_constraint.configureAngularMotor( 2, 1, 0, 5, 2000 );
-					// car.wheel_br_constraint.configureAngularMotor( 2, 1, 0, 5, 2000 );
-					// car.wheel_bl_constraint.enableAngularMotor( 2 );
-					// car.wheel_br_constraint.enableAngularMotor( 2 );
+					// Up: turn left
+					car.body.__dirtyRotation = true;
+					car.body.__dirtyPosition = true;
+					car.body.rotation.y += .05;
+					car.body.position.z -= 5;
+					car.body.children[1].rotation.z -= .1;
+					car.body.children[2].rotation.z -= .1;
 					break;
 
 				case 40:
-					// Down
-					// car.wheel_bl_constraint.configureAngularMotor( 2, 1, 0, -5, 2000 );
-					// car.wheel_br_constraint.configureAngularMotor( 2, 1, 0, -5, 2000 );
-					// car.wheel_bl_constraint.enableAngularMotor( 2 );
-					//car.wheel_br_constraint.enableAngularMotor( 2 );
+					// Down: turn to right
+					car.body.__dirtyRotation = true;
+					car.body.__dirtyPosition = true;
+					car.body.rotation.y -= .05;
+					car.body.position.z += 5;
+					car.body.children[1].rotation.z += .1;
+					car.body.children[2].rotation.z += .1;
+					break;
+			}
+		}
+	);
+
+	document.addEventListener(
+		'keyup',
+		function( ev ) {
+			switch( ev.keyCode ) {
+				case 39:
+					// Right: stop
+					rotationSpeed = .5;
 					break;
 			}
 		}
@@ -231,54 +236,9 @@ function createGround(){
 }
 
 function createCar(){
-	car = new Car(scene);
+	car = new Car();
 	// body
 	scene.add(car.body);
-
-	car.fl_constraint = new Physijs.DOFConstraint(
-		car.fl, car.body, new THREE.Vector3(car.fl.position.x, car.fl.position.y, car.fl.position.z)
-	);
-	scene.addConstraint( car.fl_constraint );
-
-	// front left wheel
-	var fl_constraint = new Physijs.DOFConstraint(
-		car.fl, car.body, new THREE.Vector3(car.fl.position.x, car.fl.position.y, car.fl.position.z)
-	);
-	scene.addConstraint( fl_constraint );
-	fl_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
-	fl_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
-	
-	// front right wheel
-	// var fr_index = car.body.children.findIndex(children => children.name == "fr_WheelRim");
-	// var fr = car.body.children[fr_index];
-	// fr.position.x = car.body.position.x + fr.position.x;
-	// fr.position.y = car.body.position.y + fr.position.y;
-	// fr.position.z = car.body.position.z + fr.position.z;
-	// scene.add(fr);
-	// var fr_constraint = new Physijs.DOFConstraint(
-	// 	fr, car.body, new THREE.Vector3(fr.position.x, fr.position.y, fr.position.z)
-	// );
-	// scene.addConstraint( fr_constraint );
-	// fr_constraint.setAngularLowerLimit({ x: 0, y: -Math.PI / 8, z: 1 });
-	// fr_constraint.setAngularUpperLimit({ x: 0, y: Math.PI / 8, z: 0 });
-
-	// // back left wheel
-	// scene.add(car.wheel_bl);
-	// var wheel_bl_constraint = new Physijs.DOFConstraint(
-	// 	car.wheel_bl, car.body, new THREE.Vector3(car.wheel_bl.position.x, car.wheel_bl.position.y, car.wheel_bl.position.z)
-	// );
-	// scene.addConstraint( wheel_bl_constraint );
-	// wheel_bl_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
-	// wheel_bl_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
-
-	// // back right wheel
-	// scene.add(car.wheel_br);
-	// var wheel_br_constraint = new Physijs.DOFConstraint(
-	// 	car.wheel_br, car.body, new THREE.Vector3(car.wheel_br.position.x, car.wheel_br.position.y, car.wheel_br.position.z)
-	// );
-	// scene.addConstraint( wheel_br_constraint );
-	// wheel_br_constraint.setAngularLowerLimit({ x: 0, y: 0, z: 0 });
-	// wheel_br_constraint.setAngularUpperLimit({ x: 0, y: 0, z: 0 });
 }
 
 // push down sky to let clouds closer to the ground
@@ -414,6 +374,10 @@ function loop(){
 	//ramp.ramp.__dirtyRotation = true;
 	ground.mesh.rotation.z += .001*rotationSpeed; // lower speed make car pass through tree meshes
 	forest.mesh.rotation.z += .001*rotationSpeed;
+	// car.body.children[1].rotation.y -= .1*rotationSpeed;
+	// car.body.children[2].rotation.y -= .1*rotationSpeed;
+	car.body.children[3].rotation.y -= .1*rotationSpeed;
+	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
 	//coin.coin.rotation.y += .05;
 	ground.mesh.traverse(function(child){

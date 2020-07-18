@@ -228,7 +228,6 @@ var Car = function(scene) {
 	spare_WheelRim.rotation.z = Math.PI/2;
 
 	this.body = body;
-	this.fl = fl;
 	this.body.add(roof); // 0
 	this.body.add(fl);
 	this.body.add(fr);
@@ -285,11 +284,6 @@ var Car = function(scene) {
 	this.body.children[7].name = "TARGETrightHeadLightLIGHT";
 	this.body.children[10].name = "leftHandle";
 	this.body.children[11].name = "rightHandle";
-
-	this.fl.position.x = this.body.position.x + this.fl.position.x;
-	this.fl.position.y = this.body.position.y + this.fl.position.y;
-	this.fl.position.z = this.body.position.z + this.fl.position.z;
-	scene.add(this.fl);
 
 console.log("Car:",this.body);
 };
