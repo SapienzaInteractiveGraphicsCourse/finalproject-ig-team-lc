@@ -76,8 +76,6 @@ function createScene() {
 					car.body.__dirtyPosition = true;
 					car.body.rotation.y += .05;
 					car.body.position.z -= 5;
-					car.body.children[1].rotation.z -= .1;
-					car.body.children[2].rotation.z -= .1;
 					break;
 
 				case 40:
@@ -86,8 +84,6 @@ function createScene() {
 					car.body.__dirtyPosition = true;
 					car.body.rotation.y -= .05;
 					car.body.position.z += 5;
-					car.body.children[1].rotation.z += .1;
-					car.body.children[2].rotation.z += .1;
 					break;
 			}
 		}
@@ -374,8 +370,8 @@ function loop(){
 	//ramp.ramp.__dirtyRotation = true;
 	ground.mesh.rotation.z += .001*rotationSpeed; // lower speed make car pass through tree meshes
 	forest.mesh.rotation.z += .001*rotationSpeed;
-	// car.body.children[1].rotation.y -= .1*rotationSpeed;
-	// car.body.children[2].rotation.y -= .1*rotationSpeed;
+	car.body.children[1].rotation.y -= .1*rotationSpeed;
+	car.body.children[2].rotation.y -= .1*rotationSpeed;
 	car.body.children[3].rotation.y -= .1*rotationSpeed;
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
