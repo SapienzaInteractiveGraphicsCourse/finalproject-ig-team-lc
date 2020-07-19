@@ -1,7 +1,7 @@
 import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
-import { Tree, Forest, Coin, Rock, Ramp } from './models/miscellaneous.js';
+import { Tree, Forest, Coin, Rock, Ramp, CoinSeries } from './models/miscellaneous.js';
 
 Physijs.scripts.worker = './js/physijs_worker.js';
 // Physijs.scripts.ammo = '/js/ammo.js';
@@ -161,107 +161,16 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-var ground, car, sky, forest, rock, coin, ramp;
+var ground, car, sky, forest, rock, coin, ramp, coinSeries;
 
 function createGround(){
 	ground = new Ground();
 	ground.mesh.position.y = -1300;
-
-
-/*
-	var nTrees = 20;
-	var stepAngle = 2*Math.PI / nTrees;
-	for(var i=0; i<nTrees; i++){
-		var tree = new Tree();
-		var angle = stepAngle*i;
-		var height = 1300 + tree.trunk.geometry.parameters.height/2;
-		tree.trunk.position.x = Math.cos(angle)*height;
-		tree.trunk.position.y = (Math.sin(angle)*height)-1300;
-		tree.trunk.position.z = Math.random() * -(340 - 60) - 60; // trees distributed on ground cylinder height: 350
-		tree.trunk.rotation.z = angle - Math.PI/2;
-		//var scale = 0.7+Math.random()*1.2;
-		//tree.trunk.scale.set(scale,scale,scale);
-		ground.mesh.attach(tree.trunk);
-
-	}
-
-	var nRocks = 11;
-	var stepAngle = 2*Math.PI / nRocks;
-	for(var i=0; i<nRocks; i++){
-		var rock = new Rock();
-		var angle = stepAngle*i;
-		var height = 1300;
-		rock.rock.position.x = Math.cos(angle)*height;
-		rock.rock.position.y = (Math.sin(angle)*height)-1300;
-		rock.rock.position.z = Math.random() * -(340 - 200) - 200;
-		rock.rock.rotation.z = angle - Math.PI/2;
-
-		if( (rock.rock.position.z <= tree.trunk.position.z && rock.rock.position.z > tree.trunk.position.z - 100) ){
-				if (rock.rock.position.z <=-300){
-					rock.rock.position.z+=200;
-				}
-				else{rock.rock.position.z += 100;}
-			//console.log("here 1");
-		}else if(rock.rock.position.z > tree.trunk.position.z && rock.rock.position.z < tree.trunk.position.z + 100){
-			if (rock.rock.position.z >=-100){
-				rock.rock.position.z-=200;
-			}
-			else{rock.rock.position.z -= 100;}
-		}
-		//console.log("rock "+i+": "+rock.rock.position.z)
-		//var scale = 0.7+Math.random()*1;
-		//rock.rock.scale.set(scale,scale,scale);
-
-		ground.mesh.attach(rock.rock);
-	}
-
-
-	var nCoins = 80;
-	var stepAngle = 2*Math.PI / nCoins;
-	for(var i=0; i<nCoins; i++){
-		var coin = new Coin();
-		var angle = stepAngle*i;
-		var height = 1300 + coin.coin.geometry.parameters.radiusTop;
-		coin.coin.name = "coin";
-		coin.coin.position.x = Math.cos(angle)*height;
-		coin.coin.position.y = (Math.sin(angle)*height)-1300;
-		coin.coin.position.z = 100;
-		//coin.coin.rotation.x = angle - Math.PI / 2;
-
-		coin.coin.rotation.z = angle - Math.PI / 2;
-		coin.coin.rotation.x = Math.PI / 2;
-		//console.log("coin rotation: ",coin.coin.rotation);
-		//console.log("coin",coin.coin);
-
-		//var scale = 0.7+Math.random()*1;
-		//rock.rock.scale.set(scale,scale,scale);
-
-		ground.mesh.attach(coin.coin);
-		//console.log("ground: ", ground.mesh);
-	}
-
-	var nRamp = 5;
-	var stepAngle = 2*Math.PI / nRamp;
-	for(var i=0; i<nRamp; i++){
-		var ramp = new Ramp();
-		var angle = stepAngle*i;
-		var height = 1300;
-		ramp.ramp.position.x = Math.cos(angle)*height;
-		ramp.ramp.position.y = (Math.sin(angle)*height)-1300;
-		ramp.ramp.position.z = 0;
-		ramp.ramp.rotation.z = angle - Math.PI/2;
-		//var scale = 0.7+Math.random()*1.2;
-		//tree.trunk.scale.set(scale,scale,scale);
-		ground.mesh.attach(ramp.ramp);
-
-	}
-*/
 	scene.add(ground.mesh);
 }
 
 function createCar(){
 	car = new Car();
-	// body
 	scene.add(car.body);
 }
 
@@ -346,8 +255,9 @@ function createForest(){
 
 function createCoins(){
 	coin = new Coin();
-	scene.add(coin.coin);
-	coin.coin.add( axesHelper );
+	coin.mesh.position.y = -1300;
+	scene.add(coin.mesh);
+	//coin.mesh.add( axesHelper );
 }
 
 function createRocks(){
@@ -358,21 +268,13 @@ function createRocks(){
 }
 
 function createRamp(){
-	//ramp = new Ramp();
-
-	var nRamp = 10;
-	var stepAngle = 2*Math.PI / nRamp;
-	for(var i=0; i<nRamp; i++){
-		var ramp = new Ramp();
-		var angle = stepAngle*i;
-		var height = 1300 + ramp.ramp.geometry.parameters.height/2-3;
-		ramp.ramp.position.x = Math.cos(angle)*height;
-		ramp.ramp.position.y = (Math.sin(angle)*height)-1300;
-		ramp.ramp.position.z = 0;
-		ramp.ramp.rotation.z = angle - Math.PI/2;
-		scene.add(ramp.ramp);
-		ramp.ramp.add( axesHelper );
-	}
+	ramp = new Ramp();
+	ramp.mesh.position.y = -1300;
+	scene.add(ramp.mesh);
+}
+function createCoinSeries(){
+	coinSeries = new CoinSeries;
+	scene.add(coinSeries.mesh);
 }
 
 // call init function when window is loaded
@@ -382,22 +284,35 @@ function init() {
 
 	createScene();
 	createLights();
+	createSky();
 	createGround();
 	createCar();
-	createSky();
-	createForest();
-	createCoins();
-	createRocks();
 	createRamp();
+	createCoins();
+	createForest();
+	createRocks();
+	createCoinSeries();
+
 	loop();
 }
 
 function loop(){
 	ground.mesh.__dirtyRotation = true;
 	forest.mesh.__dirtyRotation = true;
+	rock.mesh.__dirtyRotation = true;
+	ramp.mesh.__dirtyRotation = true;
+	coin.mesh.__dirtyRotation = true;
 	//ramp.ramp.__dirtyRotation = true;
 	ground.mesh.rotation.z += .001*rotationSpeed; // lower speed make car pass through tree meshes
 	forest.mesh.rotation.z += .001*rotationSpeed;
+	rock.mesh.rotation.z += .001*rotationSpeed;
+	ramp.mesh.rotation.z += .001*rotationSpeed;
+	coin.mesh.rotation.z += .001*rotationSpeed;
+	coin.mesh.traverse(function(child){
+		if(child.name == "coin"){
+			child.rotation.z += 0.05;
+		}
+	})
 	if (!steering) {
 		car.body.children[1].rotation.y -= .1*rotationSpeed;
 		car.body.children[2].rotation.y -= .1*rotationSpeed;
@@ -406,11 +321,14 @@ function loop(){
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
 	//coin.coin.rotation.y += .05;
+
+	/*
 	ground.mesh.traverse(function(child){
 		if(child.name == "coin"){
 			child.rotation.z += 0.05;
 		}
 	})
+	*/
 
 	scene.simulate();
 	controls.update();

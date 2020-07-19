@@ -110,36 +110,21 @@ function createCylinderTex(radiusTop, radiusBottom , height, radialSegments, pos
 	return cylinder;
 }
 
-function createTrunkPhys(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, texture, mass){
+function createTrunkPhys(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, mass){
 	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
-			map: loader.load( 'textures/'+texture ),
+			map: loader.load( 'textures/trunk.jpg' ),
 			//bumpMap: loader.load( 'textures/trunkBump.png')
 		}),
-		.8, // high friction
-		.2 // low restitution
+		.5, // high friction
+		.5 // low restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set(4, 3);
 	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
 	//material.bumpMap.repeat.set(4, 3);
 	var trunk = new Physijs.CylinderMesh(geometry, material, mass);
-	trunk.castShadow = trunk.receiveShadow = true;
-	trunk.position.set(posX, posY, posZ);
-	return trunk;
-}
-function createTrunk(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, texture){
-	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
-	var material = new THREE.MeshPhongMaterial({
-			map: loader.load( 'textures/'+texture ),
-			//bumpMap: loader.load( 'textures/trunkBump.png')
-		});
-	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
-	material.map.repeat.set(4, 3);
-	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	//material.bumpMap.repeat.set(4, 3);
-	var trunk = new THREE.Mesh(geometry, material);
 	trunk.castShadow = trunk.receiveShadow = true;
 	trunk.position.set(posX, posY, posZ);
 	return trunk;
@@ -165,23 +150,23 @@ function createCrown2(radius, detail, posX, posY, posZ, texture){
     var geometry = new THREE.IcosahedronGeometry(radius, detail);
     var material = new THREE.MeshPhongMaterial({
 		map: loader.load( 'textures/'+texture ),
-	 	bumpMap: loader.load( 'textures/crownBump.jpg')
+	 	//bumpMap: loader.load( 'textures/crownBump.jpg')
 	});
     material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
     material.map.repeat.set( 3, 3);
-	material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	material.bumpMap.repeat.set(3, 3);
+	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	//material.bumpMap.repeat.set(3, 3);
     var dodecahedron = new THREE.Mesh( geometry, material );
     dodecahedron.castShadow = dodecahedron.receiveShadow = true;
 	dodecahedron.position.set(posX, posY, posZ);
 	return dodecahedron;
 }
 
-function createRock(radius, detail, posX, posY, posZ, texture){
+function createRock(radius, detail, posX, posY, posZ){
 	var geometry = new THREE.IcosahedronGeometry(radius, detail);
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
-			map: loader.load( 'textures/'+texture ),
+			map: loader.load( 'textures/rock.jpg'),
 			//bumpMap: loader.load( 'textures/rockBump.jpg')
 		}),
 		.5, //  friction
@@ -189,8 +174,8 @@ function createRock(radius, detail, posX, posY, posZ, texture){
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
     material.map.repeat.set( 1, 1);
-	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	//material.bumpMap.repeat.set(1, 1);
+//  material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+//  material.bumpMap.repeat.set(1, 1);
     var rock = new Physijs.ConvexMesh( geometry, material, 0);
     rock.castShadow = rock.receiveShadow = true;
 	rock.position.set(posX, posY, posZ);
@@ -200,7 +185,7 @@ function createRock(radius, detail, posX, posY, posZ, texture){
 function createCoin(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, texture) {
 	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
 	var material = new THREE.MeshStandardMaterial({
-		map: loader.load( 'textures/'+texture )
+		map: loader.load( 'textures/coin.png' )
 	});
     material.map.rotation = Math.PI /2;
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
@@ -321,15 +306,16 @@ var Forest = function(){
 
     this.mesh = centralMesh;
 
-	this.nTrees = 40;
+	this.nTrees = 30;
 	var stepAngle =2*Math.PI / this.nTrees;
 	for(var i=0; i<this.nTrees; i++){
 		var tree = new Tree();
+        tree.name = "tree";
 		var angle = stepAngle*i;
 		var height = 1300 + tree.trunk.geometry.parameters.height/2;
 		tree.trunk.position.x = Math.cos(angle)*height;
 		tree.trunk.position.y = Math.sin(angle)*height;
-		tree.trunk.position.z =  Math.random() * -(340 - 60) + 60; // trees distributed on ground cylinder height: 350
+		tree.trunk.position.z =  Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
 		tree.trunk.rotation.z = angle - Math.PI/2;
 		//var scale = 0.7+Math.random()*1.2;
 		//tree.trunk.scale.set(scale,scale,scale);
@@ -339,11 +325,42 @@ var Forest = function(){
 
 
 var Coin = function(){
-    var coin = createCoin(CoinGeom.x, CoinGeom.y, CoinGeom.z, CoinGeom.w,
-        -100, CoinGeom.x, 100, 'coin.png')
+    var centralMesh = createSphere(2, 0, 0, 0);
+
+    this.mesh = centralMesh;
+
+	this.nCoins = 50;
+	var stepAngle =2*Math.PI / this.nCoins;
+	for(var i=0; i<this.nCoins; i++){
+		var coin = createCoin(CoinGeom.x, CoinGeom.y, CoinGeom.z, CoinGeom.w, -100, CoinGeom.x, 100);
+        coin.name = "coin";
+		var angle = stepAngle*i;
+		var height = 1300 + coin.geometry.parameters.radiusTop;
+		coin.position.x = Math.cos(angle)*height;
+		coin.position.y = Math.sin(angle)*height;
+		coin.position.z = Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
+		coin.rotation.z = angle - Math.PI/2;
+        coin.rotation.x = Math.PI/2;
+
+		this.mesh.add(coin);
+
+	}
+}
+
+var CoinSeries = function(){
+    var coin = createCoin(CoinGeom.x, CoinGeom.y, CoinGeom.z, CoinGeom.w, 0, CoinGeom.x, 0);
+    coin.name = "coin";
+    this.mesh = coin;
+    for(var i = 0; i < 3; i++){
+        var coinChild = createCoin(CoinGeom.x, CoinGeom.y, CoinGeom.z, CoinGeom.w, 2*CoinGeom.x+10, 0, 0);
+        coinChild.name = "coin";
+        coinChild.position.x += i * 2*coin.geometry.parameters.radiusTop+10*i;
+        this.mesh.add(coinChild);
+    }
+    this.mesh.rotation.x = Math.PI/2;
 
 
-    this.coin = coin;
+
 }
 
 var Rock = function(){
@@ -352,29 +369,41 @@ var Rock = function(){
 
     this.mesh = centralMesh;
 
-	this.nRocks = 5;
-	/*var stepAngle =2*Math.PI / this.nRocks;
+	this.nRocks = 19;
+	var stepAngle =2*Math.PI / this.nRocks;
 	for(var i=0; i<this.nRocks; i++){
-		var rock = new Rock();
-        console.log(rock);
+		var rock = createRock(RockGeom.x, RockGeom.y, 150, 0, RockGeom.x/2);
+        rock.name = "rock";
 		var angle = stepAngle*i;
-		var height = 1300 + rock.rock.geometry.parameters.radius;
-		rock.rock.position.x = Math.cos(angle)*height;
-		rock.rock.position.y = Math.sin(angle)*height;
-		rock.rock.position.z =  Math.random() * -(340 - 60) + 60; // trees distributed on ground cylinder height: 350
-		rock.rock.rotation.z = angle - Math.PI/2;
-		//var scale = 0.7+Math.random()*1.2;
-		//tree.trunk.scale.set(scale,scale,scale);
-		this.mesh.add(rock.rock);
-	}*/
+		var height = 1300;
+		rock.position.x = Math.cos(angle)*height;
+		rock.position.y = Math.sin(angle)*height;
+		rock.position.z = Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
+		rock.rotation.z = angle - Math.PI/2;
+
+		this.mesh.add(rock);
+	}
 }
+var rock
 
 var Ramp = function(){
-	var ramp = createRamp(RampGeom.x, RampGeom.y, RampGeom.z,
-        0, RampGeom.y/2, 0);
+   var centralMesh = createSphere(2, 0, 0, 0);
+   this.mesh = centralMesh;
+   this.nRamps = 15;
+   var stepAngle =2*Math.PI / this.nRamps;
+   for(var i=0; i<this.nRamps; i++){
+       var ramp = createRamp(RampGeom.x, RampGeom.y, RampGeom.z, 0, RampGeom.y/2, 0);
+       ramp.name = "ramp";
+       var angle = stepAngle*i;
+       var height = 1300 + ramp.geometry.parameters.height/2-3;
+       ramp.position.x = Math.cos(angle)*height;
+       ramp.position.y = Math.sin(angle)*height;
+       ramp.position.z = Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
+       ramp.rotation.z = angle - Math.PI/2;
 
-	this.ramp = ramp;
+       this.mesh.add(ramp);
+    }
 }
 
 
-export { Tree, Forest, Coin, Rock, Ramp };
+export { Tree, Forest, Coin, Rock, Ramp, CoinSeries };

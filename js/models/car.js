@@ -117,6 +117,11 @@ function createTire(radiusTop, radiusBottom , height, radialSegments, posX, posY
 	cylinder.rotation.x = Math.PI / 2;
 	return cylinder;
 }
+function createSpareTire(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color, mass) {
+	var cylinder = createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, color, mass);
+	cylinder.rotation.z = Math.PI / 2;
+	return cylinder;
+}
 function createRimTex(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, texture) {
 	var cylinder = createCylinderTex(radiusTop, radiusBottom , height, radialSegments, posX, posY, posZ, texture);
 	cylinder.rotation.x = Math.PI / 2;
@@ -133,8 +138,8 @@ var Car = function(scene) {
 
 	var body = createBoxPhys( BodyGeom.x, BodyGeom.y, BodyGeom.z,
 		StartPos.x, StartPos.y, StartPos.z, CarMass, Colors.armyGreen );
-	var roof = createBoxTex( RoofGeom.x, RoofGeom.y, RoofGeom.z,
-		-BodyGeom.x/2+RoofGeom.x/2, BodyGeom.y, 0, 'armyJeep.jpg');
+	var roof = createBoxPhysTex( RoofGeom.x, RoofGeom.y, RoofGeom.z,
+		-BodyGeom.x/2+RoofGeom.x/2, BodyGeom.y, 0, 0, 'armyJeep.jpg');
 	// wheels
 	var fl =  createTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
 		+BodyGeom.x/2-WheelGeom.x,
@@ -159,7 +164,7 @@ var Car = function(scene) {
 		+BodyGeom.z/2+TireDistanceFactor*WheelGeom.z,
 		Colors.black,
 		WheelMass);
-	var spareWheel = createCarLights(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
+	var spareWheel = createSpareTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
 		-BodyGeom.x/2-WheelGeom.z/2, BodyGeom.y/2, 0, Colors.black);
 	// headlights
 	var leftHeadLight = createCarLights(3,3, 1, 12,
@@ -280,8 +285,8 @@ var Car = function(scene) {
 	this.body.children[5].name = "spare_WheelRim";
 	this.body.children[6].name = "leftHeadLightLIGHT";
 	this.body.children[7].name = "rightHeadLightLIGHT";
-	this.body.children[6].name = "TARGETleftHeadLightLIGHT";
-	this.body.children[7].name = "TARGETrightHeadLightLIGHT";
+	//this.body.children[6].name = "TARGETleftHeadLightLIGHT";
+	//this.body.children[7].name = "TARGETrightHeadLightLIGHT";
 	this.body.children[10].name = "leftHandle";
 	this.body.children[11].name = "rightHandle";
 
