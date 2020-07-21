@@ -134,7 +134,7 @@ function createCarLights(radiusTop, radiusBottom , height, radialSegments, posX,
 	return cylinder;
 }
 
-var Car = function(scene) {
+var Car = function() {
 
 	var body = createBoxPhys( BodyGeom.x, BodyGeom.y, BodyGeom.z,
 		StartPos.x, StartPos.y, StartPos.z, CarMass, Colors.armyGreen );
