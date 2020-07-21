@@ -72,16 +72,26 @@ function createScene() {
 					break;
 
 				case 38:
-					// Up: turn left
+					// Up: left steering
 					steering = true;
 					car.body.__dirtyRotation = true;
 					car.body.__dirtyPosition = true;
-					car.body.children[1].rotation.y = 0;
-					car.body.children[2].rotation.y = 0;
-					car.body.children[1].rotation.z = -.5;
-					car.body.children[2].rotation.z = -.5;
-					car.body.rotation.y = .2;
-					car.body.position.z -= 10;
+
+					// wheels turn left
+					var rotation = 0;
+					var target_rotation = -.5;
+					var tween_wheels = new TWEEN.Tween(rotation).to(target_rotation, 2000);
+
+					tween_wheels.onUpdate(function(){
+						car.body.children[1].rotation.z = rotation;
+						car.body.children[2].rotation.z = rotation;
+					});
+
+					// car turns left
+					// car.body.rotation.y = .2;
+
+					// car goes left
+					// car.body.position.z -= 10;
 					break;
 
 				case 40:
@@ -93,8 +103,8 @@ function createScene() {
 					car.body.children[2].rotation.y = 0;
 					car.body.children[1].rotation.z = .5;
 					car.body.children[2].rotation.z = .5;
-					car.body.rotation.y = -.2;
-					car.body.position.z += 10;
+					// car.body.rotation.y = -.2;
+					// car.body.position.z += 10;
 					break;
 			}
 		}
@@ -112,8 +122,8 @@ function createScene() {
 					// Up: turn left
 					steering = false;
 					car.body.__dirtyRotation = true;
-					car.body.children[1].rotation.z = 0;
-					car.body.children[2].rotation.z = 0;
+					// car.body.children[1].rotation.z = 0;
+					// car.body.children[2].rotation.z = 0;
 					car.body.rotation.y = 0;
 					break;
 
