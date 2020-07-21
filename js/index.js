@@ -1,7 +1,7 @@
 import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
-import { Tree, Forest, Coin, Rock, Ramp, CoinSeries } from './models/miscellaneous.js';
+import { Tree, Forest, Coin, Rock, Ramp } from './models/miscellaneous.js';
 
 Physijs.scripts.worker = './js/physijs_worker.js';
 // Physijs.scripts.ammo = '/js/ammo.js';
@@ -28,7 +28,7 @@ function createScene() {
 	fieldOfView = 60;
 	aspectRatio = WIDTH / HEIGHT;
 	nearPlane = 1;
-	farPlane = 10000;
+	farPlane = 1000;
 	camera = new THREE.PerspectiveCamera(
 		fieldOfView,
 		aspectRatio,
@@ -36,8 +36,8 @@ function createScene() {
 		farPlane
 		);
 	camera.position.set(0, 50, 200);
-	camera.lookAt(0, 50, 0)
-	camera.up.set(0, 1, 0)
+	//camera.lookAt(0,0,0 );
+	camera.up.set(0, 1, 0);
 
 	renderer = new THREE.WebGLRenderer({
 		// Allow transparency to show the gradient background
@@ -54,8 +54,8 @@ function createScene() {
 	// link renderer DOM element to container in html
 	container = document.getElementById('world');
 	container.appendChild(renderer.domElement);
-	controls = new THREE.OrbitControls( camera, renderer.domElement );
-	controls.update();
+	//controls = new THREE.OrbitControls( camera, renderer.domElement );
+	//controls.update();
 
 	// if resize, update camera and renderer size
 	window.addEventListener('resize', winResize, false);
@@ -138,6 +138,7 @@ function createScene() {
 			}
 		}
 	);
+	//scene.add( axesHelper );
 }
 
 function winResize() {
@@ -181,7 +182,9 @@ function createGround(){
 
 function createCar(){
 	car = new Car();
+	car.body.add(camera);
 	scene.add(car.body);
+
 }
 
 // push down sky to let clouds closer to the ground
@@ -282,10 +285,6 @@ function createRamp(){
 	ramp.mesh.position.y = -1300;
 	scene.add(ramp.mesh);
 }
-function createCoinSeries(){
-	coinSeries = new CoinSeries;
-	scene.add(coinSeries.mesh);
-}
 
 // call init function when window is loaded
 window.addEventListener('load', init, false);
@@ -301,7 +300,6 @@ function init() {
 	createCoins();
 	createForest();
 	createRocks();
-	createCoinSeries();
 
 	loop();
 }
@@ -312,17 +310,19 @@ function loop(){
 	rock.mesh.__dirtyRotation = true;
 	ramp.mesh.__dirtyRotation = true;
 	coin.mesh.__dirtyRotation = true;
-	//ramp.ramp.__dirtyRotation = true;
-	ground.mesh.rotation.z += .001*rotationSpeed; // lower speed make car pass through tree meshes
+
+	ground.mesh.rotation.z += .001*rotationSpeed;
 	forest.mesh.rotation.z += .001*rotationSpeed;
 	rock.mesh.rotation.z += .001*rotationSpeed;
 	ramp.mesh.rotation.z += .001*rotationSpeed;
 	coin.mesh.rotation.z += .001*rotationSpeed;
+
 	coin.mesh.traverse(function(child){
 		if(child.name == "coin"){
 			child.rotation.z += 0.05;
 		}
-	})
+	});
+
 	if (!steering) {
 		car.body.children[1].rotation.y -= .1*rotationSpeed;
 		car.body.children[2].rotation.y -= .1*rotationSpeed;
@@ -330,18 +330,10 @@ function loop(){
 	car.body.children[3].rotation.y -= .1*rotationSpeed;
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
-	//coin.coin.rotation.y += .05;
-
-	/*
-	ground.mesh.traverse(function(child){
-		if(child.name == "coin"){
-			child.rotation.z += 0.05;
-		}
-	})
-	*/
 
 	scene.simulate();
-	controls.update();
+	camera.lookAt(0,0,car.body.position.z );
+	//controls.update();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);
 }
