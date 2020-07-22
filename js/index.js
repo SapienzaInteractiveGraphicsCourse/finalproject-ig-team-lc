@@ -84,8 +84,8 @@ function createScene() {
 
 					break;
 
-				case 38:
-					// Up: left steering
+				case 37:
+					// Left: left steering
 
 					// wheels turn left
 					var w_rotation = {y: 0, z: 0};
@@ -125,8 +125,8 @@ function createScene() {
 
 					break;
 
-				case 40:
-					// Down: right steering
+				case 39:
+					// Right: right steering
 
 					// wheels turn right
                     var w_rotation = {y: 0, z: 0};
@@ -173,8 +173,8 @@ function createScene() {
 		'keyup',
 		function( ev ) {
 			switch( ev.keyCode ) {
-				case 39:
-					// Right: stop
+				case 38:
+					// Up: stop
 
 					var speed = {s: rotationSpeed};
 					var speed_target = {s: .5};
@@ -185,9 +185,9 @@ function createScene() {
 
 					break;
 
-				case 38:
-				case 40:
-					// Up: turn normal
+				case 37:
+				case 39:
+					// Left/Right: turn normal
 
 					// wheels turn normal
 					var w_rotation = {z: car.body.children[1].rotation.z};
@@ -383,6 +383,7 @@ function loop(){
 	rock.mesh.__dirtyRotation = true;
 	ramp.mesh.__dirtyRotation = true;
 	coin.mesh.__dirtyRotation = true;
+	car.body.__dirtyPosition = true;
 
 	ground.mesh.rotation.z += .001*rotationSpeed;
 	forest.mesh.rotation.z += .001*rotationSpeed;
@@ -396,6 +397,7 @@ function loop(){
 		}
 	});
 
+	car.body.position.x = -100;
 	if (!steering) {
 		car.body.children[1].rotation.y -= .1*rotationSpeed;
 		car.body.children[2].rotation.y -= .1*rotationSpeed;
@@ -403,7 +405,7 @@ function loop(){
 	car.body.children[3].rotation.y -= .1*rotationSpeed;
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
-	console.log(car.body.physijs.touches);
+	console.log(car.body._physijs.touches);
 	TWEEN.update();
 
 	scene.simulate();
