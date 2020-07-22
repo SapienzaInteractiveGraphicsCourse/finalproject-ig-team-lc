@@ -370,6 +370,18 @@ function createRamp(){
 	scene.add(ramp.mesh);
 }
 
+function resetCar() {
+	car.body.__dirtyPosition = true;
+	car.body.__dirtyRotation = true;
+	rotationSpeed = 0;
+	car.body.children[1].rotation.z = 0;
+	car.body.children[2].rotation.z = 0;
+	car.body.position.set(-100, 12, 0);
+	car.body.rotation.set(0, 0, 0);
+
+	isGameOn = true;
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
@@ -424,12 +436,8 @@ function loop(){
 
 	var touches = car.body._physijs.touches;
 	if (touches.length > 1 && (touches.includes(26) || touches.includes(47))) {
-		// isGameOn = false;
-		car.body.__dirtyPosition = true;
-		car.body.__dirtyRotation = true;
-		rotationSpeed = 0;
-		car.body.position.set(-100, 12, 0);
-		car.body.rotation.set(0, 0, 0);
+		isGameOn = false;
+		setTimeout(resetCar, 3000);
 	}
 
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
