@@ -21,6 +21,15 @@ function dynamicCarPosZ(){
 		else return car.body.position.z;
 };
 
+function handleCollision(collided_with){
+	switch ( collided_with ) {
+
+		case collided_with:
+			console.log(collided_with);
+			break;
+	}
+}
+
 function createScene() {
 	HEIGHT = window.innerHeight;
 	WIDTH = window.innerWidth;
@@ -256,6 +265,7 @@ function createGround(){
 
 function createCar(){
 	car = new Car();
+	car.body.addEventListener('collision', handleCollision);
 	scene.add(car.body);
 
 }
@@ -406,7 +416,7 @@ function loop(){
 	TWEEN.update();
 
 	scene.simulate();
-
+	//console.log(car.body._physijs.children[1].touches);
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
 	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
 	//controls.update();

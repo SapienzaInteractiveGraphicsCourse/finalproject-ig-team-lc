@@ -13,6 +13,11 @@ const StartPos = new THREE.Vector3( -100, 45, 0 ),
 
 var loader = new THREE.TextureLoader();
 
+/*
+	Access car wheel touches:
+	this.body.
+*/
+
 //geometries constructors
 function createBoxPhys(x, y, z, posX, posY, posZ, mass, color){
 	var geometry = new THREE.BoxGeometry(x, y, z);
@@ -20,8 +25,8 @@ function createBoxPhys(x, y, z, posX, posY, posZ, mass, color){
 		new THREE.MeshPhongMaterial({
 			color: color
 		}),
-		.5, // medium friction
-		.5 // medium restitution
+		.5, //  friction
+		.2 //  restitution
 	);
 	var box =  new Physijs.BoxMesh(geometry, material, mass);
 	box.castShadow = box.receiveShadow = true;
@@ -165,7 +170,7 @@ var Car = function() {
 		Colors.black,
 		WheelMass);
 	var spareWheel = createSpareTire(WheelGeom.x, WheelGeom.y, WheelGeom.z, WheelGeom.w,
-		-BodyGeom.x/2-WheelGeom.z/2, BodyGeom.y/2, 0, Colors.black);
+		-BodyGeom.x/2-WheelGeom.z/2, BodyGeom.y/2, 0, Colors.black, WheelMass);
 	// headlights
 	var leftHeadLight = createCarLights(3,3, 1, 12,
 		BodyGeom.x/2, BodyGeom.y/2-3, -BodyGeom.z/2+3, Colors.white);
@@ -278,15 +283,15 @@ var Car = function() {
 			}
 		}
 	}
-	this.body.children[1].name = "fl_WheelRim";
-	this.body.children[2].name = "fr_WheelRim";
-	this.body.children[3].name = "bl_WheelRim";
-	this.body.children[4].name = "br_WheelRim";
+	this.body.children[1].children[0].name = "fl_WheelRim";
+	this.body.children[2].children[0].name = "fr_WheelRim";
+	this.body.children[3].children[0].name = "bl_WheelRim";
+	this.body.children[4].children[0].name = "br_WheelRim";
 	this.body.children[5].name = "spare_WheelRim";
-	this.body.children[6].name = "leftHeadLightLIGHT";
-	this.body.children[7].name = "rightHeadLightLIGHT";
-	//this.body.children[6].name = "TARGETleftHeadLightLIGHT";
-	//this.body.children[7].name = "TARGETrightHeadLightLIGHT";
+	this.body.children[6].children[0].name = "leftHeadLightLIGHT";
+	this.body.children[7].children[0].name = "rightHeadLightLIGHT";
+	this.body.children[6].children[1].name = "TARGETleftHeadLightLIGHT";
+	this.body.children[7].children[1].name = "TARGETrightHeadLightLIGHT";
 	this.body.children[10].name = "leftHandle";
 	this.body.children[11].name = "rightHandle";
 

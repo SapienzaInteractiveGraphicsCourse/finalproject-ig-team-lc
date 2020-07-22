@@ -185,7 +185,7 @@ function createCrown2(radius, height, posX, posY, posZ){
 	 	//bumpMap: loader.load( 'textures/crownBump.jpg')
 	});
     material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
-    material.map.repeat.set( 5, 1);
+    material.map.repeat.set( 15, 3);
 	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
 	//material.bumpMap.repeat.set(3, 3);
     var cone = new THREE.Mesh( geometry, material );
@@ -339,7 +339,7 @@ var Forest = function(){
 		tree.trunk.rotation.z = angle - Math.PI/2;
         var objPos = new THREE.Vector3(tree.trunk.position.x, tree.trunk.position.y, tree.trunk.position.z );
         var newAngle = 0.3*angle;
-        var k
+        var k=0;
         for(var pos of takenPosArray){
             while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 70 ){
                 objPos.x = tree.trunk.position.x = Math.cos(angle+newAngle)*height;
@@ -347,7 +347,7 @@ var Forest = function(){
                 objPos.z = tree.trunk.position.z = radnomRoadSideZ(-340, 340, 70);
                 tree.trunk.rotation.z = angle+newAngle - Math.PI/2;
                 k++;
-                console.log("ramp "+ k);
+                console.log("TREE repositioned "+ k + " times");
             }
         }
         takenPosArray.push(objPos);
@@ -376,16 +376,15 @@ var Coin = function(){
 
         var objPos = new THREE.Vector3(coin.position.x, coin.position.y, coin.position.z );
         var newAngle = 0.3*angle;
-        var k;
+        var k=0;
         for(var pos of takenPosArray){
             while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 70 ){
-                console.log("distance Coin: "+objPos.distanceTo(pos));
                 objPos.x = coin.position.x = Math.cos(angle+newAngle)*height;
                 objPos.y = coin.position.y = Math.sin(angle+newAngle)*height;
                 objPos.z = coin.position.z = radnomRoadSideZ(-340, 340, 70);
                 coin.rotation.y = angle+newAngle - Math.PI/2;
                 k++;
-                console.log("ramp "+ k);
+                console.log("COIN repositioned "+ k + " times");
             }
         }
         takenPosArray.push(objPos);
@@ -414,7 +413,7 @@ var Rock = function(){
 		rock.rotation.z = angle - Math.PI/2;
         var objPos = new THREE.Vector3(rock.position.x, rock.position.y, rock.position.z );
         var newAngle = 0.3*angle;
-        var k;
+        var k=0;
         for(var pos of takenPosArray){
             while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 70 ){
                 objPos.x = rock.position.x = Math.cos(angle+newAngle)*height;
@@ -422,7 +421,7 @@ var Rock = function(){
                 objPos.z = rock.position.z =  radnomRoadSideZ(-340, 340, 70);
                 rock.rotation.z = angle+newAngle - Math.PI/2;
                 k++;
-                console.log("ramp "+ k);
+                console.log("ROCK repositioned "+ k + " time");
             }
 
         }
@@ -447,7 +446,7 @@ var Ramp = function(){
        ramp.rotation.z = angle - Math.PI/2;
        var objPos = new THREE.Vector3(ramp.position.x, ramp.position.y, ramp.position.z );
        var newAngle = 1.5*angle;
-       var k;
+       var k=0;
        for(var pos of takenPosArray){
            while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 100 ){
                console.log("distance RAMP before: "+objPos.distanceTo(pos));
@@ -456,14 +455,13 @@ var Ramp = function(){
                objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 110);
                ramp.rotation.z = angle+newAngle - Math.PI/2;
                k++;
-               console.log("ramp "+ k);
+               console.log("RAMP repositioned "+ k + " time");
            }
 
        }
        takenPosArray.push(objPos);
        this.mesh.add(ramp);
     }
-    console.log("array: ",takenPosArray)
 }
 
 
