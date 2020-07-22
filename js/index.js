@@ -14,6 +14,13 @@ var controls;
 var axesHelper = new THREE.AxesHelper( 30 );
 var steering = false;
 
+function dynamicCarPosZ(){
+		if(car.body.position.z > 30){
+			return 30;
+		}
+		else return car.body.position.z;
+};
+
 function createScene() {
 	HEIGHT = window.innerHeight;
 	WIDTH = window.innerWidth;
@@ -28,14 +35,14 @@ function createScene() {
 	fieldOfView = 60;
 	aspectRatio = WIDTH / HEIGHT;
 	nearPlane = 1;
-	farPlane = 1000;
+	farPlane = 2000;
 	camera = new THREE.PerspectiveCamera(
 		fieldOfView,
 		aspectRatio,
 		nearPlane,
 		farPlane
 		);
-	camera.position.set(0, 50, 200);
+	//camera.position.set(car.body.position.x -100, car.body.position.x + 70, car.body.position.x + 200);
 	//camera.lookAt(0,0,0 );
 	camera.up.set(0, 1, 0);
 
@@ -64,15 +71,15 @@ function createScene() {
 		'keydown',
 		function( ev ) {
 			switch( ev.keyCode ) {
-				case 39:
-					// Right arrow: start
+				case 38:
+					// up: start
 					if (rotationSpeed < 1.5) {
 						rotationSpeed += .5;
 					}
 					break;
 
-				case 38:
-					// Up: turn left
+				case 37:
+					// left arrow: turn left
 					steering = true;
 					car.body.__dirtyRotation = true;
 					car.body.__dirtyPosition = true;
@@ -84,8 +91,8 @@ function createScene() {
 					car.body.position.z -= 10;
 					break;
 
-				case 40:
-					// Down: turn right
+				case 39:
+					// right arrow: turn right
 					steering = true;
 					car.body.__dirtyRotation = true;
 					car.body.__dirtyPosition = true;
@@ -104,12 +111,12 @@ function createScene() {
 		'keyup',
 		function( ev ) {
 			switch( ev.keyCode ) {
-				case 39:
-					// Right: stop
+				case 38:
+					// up: stop
 					rotationSpeed = .5;
 					break;
-				case 38:
-					// Up: turn left
+				case 37:
+					// left: turn left
 					steering = false;
 					car.body.__dirtyRotation = true;
 					car.body.children[1].rotation.z = 0;
@@ -117,8 +124,8 @@ function createScene() {
 					car.body.rotation.y = 0;
 					break;
 
-				case 40:
-					// Down: turn right
+				case 39:
+					// right: turn right
 					steering = false;
 					car.body.__dirtyRotation = true;
 					car.body.children[1].rotation.z = 0;
@@ -172,7 +179,6 @@ function createGround(){
 
 function createCar(){
 	car = new Car();
-	car.body.add(camera);
 	scene.add(car.body);
 
 }
@@ -321,8 +327,12 @@ function loop(){
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
 
+	console.log(car.body.physijs.touches);
 	scene.simulate();
-	camera.lookAt(0,0,car.body.position.z );
+
+	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 -( dynamicCarPosZ() ), car.body.position.z + 200);
+	//console.log(car.body.position.z);
+	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
 	//controls.update();
 	renderer.render(scene, camera);
 	requestAnimationFrame(loop);

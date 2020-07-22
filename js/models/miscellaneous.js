@@ -12,6 +12,17 @@ takenPosArray.push(CarStartPos);
 
 var loader = new THREE.TextureLoader();
 
+function rangedRandom(min, max){
+    return Math.random() * (max-min+1) + min;
+}
+
+function radnomRoadSideZ(min, max, centralGap){
+    if(Math.random() > 0.5){
+        return rangedRandom(centralGap, max);
+    }
+    else return rangedRandom(min, -centralGap);
+}
+
 function checkPos(obj, posArray){
     var objPos = new THREE.Vector3(obj.position.x, obj.position.y, obj.position.z );
     console.log(objPos);
@@ -135,15 +146,15 @@ function createTrunkPhys(radiusTop, radiusBottom , height, radialSegments, posX,
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
 			map: loader.load( 'textures/trunk.jpg' ),
-			bumpMap: loader.load( 'textures/trunkBump.png')
+			//bumpMap: loader.load( 'textures/trunkBump.png')
 		}),
 		.5, // high friction
 		.5 // low restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set(4, 3);
-	material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-	material.bumpMap.repeat.set(4, 3);
+	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+	//material.bumpMap.repeat.set(4, 3);
 	var trunk = new Physijs.CylinderMesh(geometry, material, mass);
 	trunk.castShadow = trunk.receiveShadow = true;
 	trunk.position.set(posX, posY, posZ);
@@ -187,15 +198,15 @@ function createRock(radius, detail, posX, posY, posZ){
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({
 			map: loader.load( 'textures/rock.jpg'),
-			bumpMap: loader.load( 'textures/rockBump.jpg')
+			//bumpMap: loader.load( 'textures/rockBump.jpg')
 		}),
 		.5, //  friction
 		.5 //  restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
     material.map.repeat.set( 1, 1);
-    material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
-    material.bumpMap.repeat.set(1, 1);
+    //material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
+    //material.bumpMap.repeat.set(1, 1);
     var rock = new Physijs.ConvexMesh( geometry, material, 0);
     rock.castShadow = rock.receiveShadow = true;
 	rock.position.set(posX, posY, posZ);
@@ -330,18 +341,19 @@ var Forest = function(){
 		var height = 1300 + tree.trunk.geometry.parameters.height/2;
 		tree.trunk.position.x = Math.cos(angle)*height;
 		tree.trunk.position.y = Math.sin(angle)*height;
-		tree.trunk.position.z = Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
+		tree.trunk.position.z = radnomRoadSideZ(-340, 340, 70); // trees distributed on ground cylinder height: 350
 		tree.trunk.rotation.z = angle - Math.PI/2;
         var objPos = new THREE.Vector3(tree.trunk.position.x, tree.trunk.position.y, tree.trunk.position.z );
         var newAngle = 0.3*angle;
+        var k
         for(var pos of takenPosArray){
             while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 70 ){
-                console.log("distance tree before: "+objPos.distanceTo(pos));
                 objPos.x = tree.trunk.position.x = Math.cos(angle+newAngle)*height;
         		objPos.y = tree.trunk.position.y = Math.sin(angle+newAngle)*height;
-                objPos.z = tree.trunk.position.z = Math.random() * -(340 - 60) + (-60);
-                console.log("distance tree after: "+objPos.distanceTo(pos));
+                objPos.z = tree.trunk.position.z = radnomRoadSideZ(-340, 340, 70);
                 tree.trunk.rotation.z = angle+newAngle - Math.PI/2;
+                k++;
+                console.log("ramp "+ k);
             }
         }
         takenPosArray.push(objPos);
@@ -364,19 +376,22 @@ var Coin = function(){
 		var height = 1300 + coin.geometry.parameters.radiusTop;
 		coin.position.x = Math.cos(angle)*height;
 		coin.position.y = Math.sin(angle)*height;
-		coin.position.z = Math.random() * -(340 - 60) + 60; // trees distributed on ground cylinder height: 350
+		coin.position.z = radnomRoadSideZ(-340, 340, 70); // trees distributed on ground cylinder height: 350
         coin.rotation.x = Math.PI/2;
 		coin.rotation.y = angle - Math.PI/2;
 
         var objPos = new THREE.Vector3(coin.position.x, coin.position.y, coin.position.z );
         var newAngle = 0.3*angle;
+        var k;
         for(var pos of takenPosArray){
             while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 70 ){
                 console.log("distance Coin: "+objPos.distanceTo(pos));
                 objPos.x = coin.position.x = Math.cos(angle+newAngle)*height;
                 objPos.y = coin.position.y = Math.sin(angle+newAngle)*height;
-                objPos.z = coin.position.z = Math.random() * (-(340 - 60)) + (-60);
+                objPos.z = coin.position.z = radnomRoadSideZ(-340, 340, 70);
                 coin.rotation.y = angle+newAngle - Math.PI/2;
+                k++;
+                console.log("ramp "+ k);
             }
         }
         takenPosArray.push(objPos);
@@ -401,18 +416,19 @@ var Rock = function(){
 		var height = 1300;
 		rock.position.x = Math.cos(angle)*height;
 		rock.position.y = Math.sin(angle)*height;
-		rock.position.z = Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
+		rock.position.z = radnomRoadSideZ(-340, 340, 70); // trees distributed on ground cylinder height: 350
 		rock.rotation.z = angle - Math.PI/2;
         var objPos = new THREE.Vector3(rock.position.x, rock.position.y, rock.position.z );
         var newAngle = 0.3*angle;
+        var k;
         for(var pos of takenPosArray){
             while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 70 ){
-                console.log("distance rock before: "+objPos.distanceTo(pos));
                 objPos.x = rock.position.x = Math.cos(angle+newAngle)*height;
                 objPos.y = rock.position.y = Math.sin(angle+newAngle)*height;
-                objPos.z = rock.position.z =  Math.random() * -(340 - 60) + (-60);
+                objPos.z = rock.position.z =  radnomRoadSideZ(-340, 340, 70);
                 rock.rotation.z = angle+newAngle - Math.PI/2;
-                console.log("distance rock after: "+objPos.distanceTo(pos));
+                k++;
+                console.log("ramp "+ k);
             }
 
         }
@@ -433,17 +449,20 @@ var Ramp = function(){
        var height = 1300 + ramp.geometry.parameters.height/2-3;
        ramp.position.x = Math.cos(angle)*height;
        ramp.position.y = Math.sin(angle)*height;
-       ramp.position.z = Math.random() * -(340 - 60) + (-60); // trees distributed on ground cylinder height: 350
+       ramp.position.z = radnomRoadSideZ(-340, 340, 70); // trees distributed on ground cylinder height: 350
        ramp.rotation.z = angle - Math.PI/2;
        var objPos = new THREE.Vector3(ramp.position.x, ramp.position.y, ramp.position.z );
-       var newAngle = 0.6*angle;
+       var newAngle = 1.5*angle;
+       var k;
        for(var pos of takenPosArray){
            while(objPos.distanceTo(pos) < 70 || objPos.distanceTo(CarStartPos) < 100 ){
                console.log("distance RAMP before: "+objPos.distanceTo(pos));
                objPos.x = ramp.position.x = Math.cos(angle+newAngle)*height;
                objPos.y = ramp.position.y = Math.sin(angle+newAngle)*height;
-               objPos.z = ramp.position.z =  Math.random() * -(340 - 60) + (-60);
+               objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 70);
                ramp.rotation.z = angle+newAngle - Math.PI/2;
+               k++;
+               console.log("ramp "+ k);
            }
 
        }
