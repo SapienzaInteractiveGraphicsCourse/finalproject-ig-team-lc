@@ -27,7 +27,7 @@ function createScene() {
 	WIDTH = window.innerWidth;
 
 	scene = new Physijs.Scene;
-	scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+	scene.setGravity(new THREE.Vector3( 0, -70, 0 ));
 
 	// fog effect
 	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
@@ -181,7 +181,7 @@ function createScene() {
 		function( ev ) {
 			switch( ev.keyCode ) {
 				case 38:
-					// Up: stop
+					// up: stop
 
 					if (isGameOn) {
 						var speed = {s: rotationSpeed};
@@ -422,8 +422,6 @@ function loop(){
 
 	scene.simulate();
 
-	console.log(car.body._physijs.touches);
-
 	var touches = car.body._physijs.touches;
 	if (touches.length > 1 && (touches.includes(26) || touches.includes(47))) {
 		// isGameOn = false;
@@ -434,8 +432,7 @@ function loop(){
 		car.body.rotation.set(0, 0, 0);
 	}
 
-	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 -( dynamicCarPosZ() ), car.body.position.z + 200);
-	//console.log(car.body.position.z);
+	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
 	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
 	//controls.update();
 	renderer.render(scene, camera);

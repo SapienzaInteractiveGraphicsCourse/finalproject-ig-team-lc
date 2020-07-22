@@ -2,6 +2,7 @@ import { Colors } from '../colors.js';
 
 const TrunkGeom = new THREE.Vector4(7, 8, 80, 8);
 const CrownGeom = new THREE.Vector2(40, 1);
+const ConeCrownGeom = new THREE.Vector2(50, 60);
 const CoinGeom = new THREE.Vector4(15, 15, 2, 20);
 const RockGeom = new THREE.Vector2(40, 1);
 const RampGeom = new THREE.Vector3(150, 60, 100);
@@ -177,20 +178,20 @@ function createCrown(radius, detail, posX, posY, posZ, texture){
 	return dodecahedron;
 }
 
-function createCrown2(radius, detail, posX, posY, posZ, texture){
-    var geometry = new THREE.IcosahedronGeometry(radius, detail);
+function createCrown2(radius, height, posX, posY, posZ){
+    var geometry = new THREE.ConeGeometry(radius, height, 6 , 1);
     var material = new THREE.MeshPhongMaterial({
-		map: loader.load( 'textures/'+texture ),
+		map: loader.load( 'textures/crown2-2.png' ),
 	 	//bumpMap: loader.load( 'textures/crownBump.jpg')
 	});
     material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
-    material.map.repeat.set( 3, 3);
+    material.map.repeat.set( 5, 1);
 	//material.bumpMap.wrapS = material.bumpMap.wrapT = THREE.RepeatWrapping;
 	//material.bumpMap.repeat.set(3, 3);
-    var dodecahedron = new THREE.Mesh( geometry, material );
-    dodecahedron.castShadow = dodecahedron.receiveShadow = true;
-	dodecahedron.position.set(posX, posY, posZ);
-	return dodecahedron;
+    var cone = new THREE.Mesh( geometry, material );
+    cone.castShadow = cone.receiveShadow = true;
+	cone.position.set(posX, posY, posZ);
+	return cone;
 }
 
 function createRock(radius, detail, posX, posY, posZ){
@@ -293,30 +294,23 @@ var Tree = function(){
 */
 var Tree = function(){
     var trunk = createTrunkPhys(TrunkGeom.x, TrunkGeom.y , TrunkGeom.z, TrunkGeom.w,
-        0, 40, 0, 'trunk.jpg', 0);
-    var crown1 = createCrown(CrownGeom.x, CrownGeom.y,
-        0, TrunkGeom.z/2+CrownGeom.x/2, 0, 'crown.jpg');
-    var crown2 = createCrown(0.8*CrownGeom.x, CrownGeom.y,
-        0.8*CrownGeom.x/2, 0.8*CrownGeom.x/2, -CrownGeom.x/2, 'crown.jpg');
-    var crown3 = createCrown(0.8*CrownGeom.x, CrownGeom.y,
-        -0.8*CrownGeom.x/2, 0.6*CrownGeom.x/2, +CrownGeom.x/2, 'crown.jpg');
-    var crown4 = createCrown(0.8*CrownGeom.x, CrownGeom.y,
-        0, 0.8*CrownGeom.x, 0, 'crown.jpg');
-    var crown5 = createCrown(0.7*CrownGeom.x, CrownGeom.y,
-        0.8*CrownGeom.x/2, 0.8*CrownGeom.x/2, 0.8*CrownGeom.x/2, 'crown.jpg');
-    var crown6 = createCrown(0.6*CrownGeom.x, CrownGeom.y,
-        -CrownGeom.x/2, 0.6*CrownGeom.x/2, -CrownGeom.x/2, 'crown.jpg');
-    var crown7 = createCrown(0.6*CrownGeom.x, CrownGeom.y,
-        -0.6*CrownGeom.x/2, -CrownGeom.x/2, 0.6*CrownGeom.x/2, 'crown.jpg');
+        0, 0, 0, 0);
+    var crown1 = createCrown2(ConeCrownGeom.x, ConeCrownGeom.y,
+        0, TrunkGeom.z/2-ConeCrownGeom.y/4, 0);
+    var crown2 = createCrown2(0.8*ConeCrownGeom.x, 0.8*ConeCrownGeom.y,
+        0, 0.8*ConeCrownGeom.y/2, 0);
+    var crown3 = createCrown2(0.6*ConeCrownGeom.x, 0.6*ConeCrownGeom.y,
+        0, 0.6*ConeCrownGeom.y/2, 0);
+
 
     this.trunk = trunk;
+    this.trunk.name = "trunk"
     this.trunk.add(crown1);
+    this.trunk.children[0].name = "crown"
     this.trunk.children[0].add(crown2);
-    this.trunk.children[0].add(crown3);
-    this.trunk.children[0].add(crown4);
-    this.trunk.children[0].add(crown5);
-    this.trunk.children[0].add(crown6);
-    this.trunk.children[0].add(crown7);
+    this.trunk.children[0].children[0].name = "crown"
+    this.trunk.children[0].children[0].add(crown3);
+    this.trunk.children[0].children[0].children[0].name = "crown"
 };
 
 /*
@@ -459,7 +453,7 @@ var Ramp = function(){
                console.log("distance RAMP before: "+objPos.distanceTo(pos));
                objPos.x = ramp.position.x = Math.cos(angle+newAngle)*height;
                objPos.y = ramp.position.y = Math.sin(angle+newAngle)*height;
-               objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 70);
+               objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 110);
                ramp.rotation.z = angle+newAngle - Math.PI/2;
                k++;
                console.log("ramp "+ k);
