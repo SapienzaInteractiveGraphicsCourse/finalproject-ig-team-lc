@@ -26,7 +26,7 @@ function createScene() {
 	WIDTH = window.innerWidth;
 
 	scene = new Physijs.Scene;
-	scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+	scene.setGravity(new THREE.Vector3( 0, -70, 0 ));
 
 	// fog effect
 	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
@@ -84,8 +84,8 @@ function createScene() {
 
 					break;
 
-				case 38:
-					// Up: left steering
+				case 37:
+					// left: left steering
 
 					// wheels turn left
 					var w_rotation = {y: 0, z: 0};
@@ -108,7 +108,7 @@ function createScene() {
 
 					// car goes left
 					var b_position = {z: car.body.position.z};
-					var b_target_position = {z: car.body.position.z - 10};
+					var b_target_position = {z: car.body.position.z - 40};
 					var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
 					.onUpdate(function(){
 						car.body.__dirtyPosition = true;
@@ -125,7 +125,7 @@ function createScene() {
 
 					break;
 
-				case 40:
+				case 39:
 					// Down: right steering
 
 					// wheels turn right
@@ -149,7 +149,7 @@ function createScene() {
 
                     // car goes right
                     var b_position = {z: car.body.position.z};
-                    var b_target_position = {z: car.body.position.z + 10};
+                    var b_target_position = {z: car.body.position.z + 40};
                     var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
                     .onUpdate(function(){
                         car.body.__dirtyPosition = true;
@@ -173,8 +173,8 @@ function createScene() {
 		'keyup',
 		function( ev ) {
 			switch( ev.keyCode ) {
-				case 39:
-					// Right: stop
+				case 38:
+					// up: stop
 
 					var speed = {s: rotationSpeed};
 					var speed_target = {s: .5};
@@ -185,8 +185,8 @@ function createScene() {
 
 					break;
 
-				case 38:
-				case 40:
+				case 37:
+				case 39:
 					// Up: turn normal
 
 					// wheels turn normal
@@ -403,13 +403,11 @@ function loop(){
 	car.body.children[3].rotation.y -= .1*rotationSpeed;
 	car.body.children[4].rotation.y -= .1*rotationSpeed;
 	sky.mesh.rotation.z += .00024;
-	console.log(car.body.physijs.touches);
 	TWEEN.update();
 
 	scene.simulate();
 
-	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 -( dynamicCarPosZ() ), car.body.position.z + 200);
-	//console.log(car.body.position.z);
+	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
 	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
 	//controls.update();
 	renderer.render(scene, camera);
