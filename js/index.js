@@ -13,6 +13,7 @@ var rotationSpeed = 0;
 var controls;
 var axesHelper = new THREE.AxesHelper( 30 );
 var steering = false;
+var isGameOn = false;
 
 function dynamicCarPosZ(){
 		if(car.body.position.z > 30){
@@ -82,96 +83,102 @@ function createScene() {
 			switch( ev.keyCode ) {
 				case 38:
 					// up: start
-					if (rotationSpeed < 1.5) {
-						var speed = {s: rotationSpeed};
-						var speed_target = {s: rotationSpeed + .25};
-						var tween_speed = new TWEEN.Tween(speed).to(speed_target, 125).onUpdate(function(){
-							rotationSpeed = speed.s;
-						}).easing(TWEEN.Easing.Quadratic.In);
-						tween_speed.start();
+					if (isGameOn) {
+						if (rotationSpeed < 1.5) {
+							var speed = {s: rotationSpeed};
+							var speed_target = {s: rotationSpeed + .25};
+							var tween_speed = new TWEEN.Tween(speed).to(speed_target, 125).onUpdate(function(){
+								rotationSpeed = speed.s;
+							}).easing(TWEEN.Easing.Quadratic.In);
+							tween_speed.start();
+						}
 					}
 
 					break;
 
 				case 37:
-					// left: left steering
+					// Left: left steering
 
-					// wheels turn left
-					var w_rotation = {y: 0, z: 0};
-					var w_target_rotation = {y: 0, z: -.5};
-					var tween_wheels = new TWEEN.Tween(w_rotation).to(w_target_rotation, 125).onUpdate(function(){
-						steering = true;
-						car.body.children[1].rotation.y = w_rotation.y;
-						car.body.children[2].rotation.y = w_rotation.y;
-						car.body.children[1].rotation.z = w_rotation.z;
-						car.body.children[2].rotation.z = w_rotation.z;
-					});
+					if (isGameOn) {
+						// wheels turn left
+						var w_rotation = {y: 0, z: 0};
+						var w_target_rotation = {y: 0, z: -.5};
+						var tween_wheels = new TWEEN.Tween(w_rotation).to(w_target_rotation, 125).onUpdate(function(){
+							steering = true;
+							car.body.children[1].rotation.y = w_rotation.y;
+							car.body.children[2].rotation.y = w_rotation.y;
+							car.body.children[1].rotation.z = w_rotation.z;
+							car.body.children[2].rotation.z = w_rotation.z;
+						});
 
-					// car turns left
-					var b_rotation = {y: 0};
-					var b_target_rotation = {y: .2};
-					var tween_body_r = new TWEEN.Tween(b_rotation).to(b_target_rotation, 250).onUpdate(function(){
-						car.body.__dirtyRotation = true;
-						car.body.rotation.y = b_rotation.y;
-					});
+						// car turns left
+						var b_rotation = {y: 0};
+						var b_target_rotation = {y: .2};
+						var tween_body_r = new TWEEN.Tween(b_rotation).to(b_target_rotation, 250).onUpdate(function(){
+							car.body.__dirtyRotation = true;
+							car.body.rotation.y = b_rotation.y;
+						});
 
-					// car goes left
-					var b_position = {z: car.body.position.z};
-					var b_target_position = {z: car.body.position.z - 40};
-					var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
-					.onUpdate(function(){
-						car.body.__dirtyPosition = true;
-						car.body.position.z = b_position.z;
-					});
+						// car goes left
+						var b_position = {z: car.body.position.z};
+						var b_target_position = {z: car.body.position.z - 40};
+						var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
+						.onUpdate(function(){
+							car.body.__dirtyPosition = true;
+							car.body.position.z = b_position.z;
+						});
 
-					if (!steering) {
-						tween_body_r.chain(tween_body_p);
-						tween_wheels.chain(tween_body_r);
-						tween_wheels.start();
-					} else {
-						tween_body_p.start();
+						if (!steering) {
+							tween_body_r.chain(tween_body_p);
+							tween_wheels.chain(tween_body_r);
+							tween_wheels.start();
+						} else {
+							tween_body_p.start();
+						}
 					}
 
 					break;
 
 				case 39:
-					// Down: right steering
+					// Right: right steering
 
-					// wheels turn right
-                    var w_rotation = {y: 0, z: 0};
-                    var w_target_rotation = {y: 0, z: .5};
-                    var tween_wheels = new TWEEN.Tween(w_rotation).to(w_target_rotation, 125).onUpdate(function(){
-                        steering = true;
-                        car.body.children[1].rotation.y = w_rotation.y;
-                        car.body.children[2].rotation.y = w_rotation.y;
-                        car.body.children[1].rotation.z = w_rotation.z;
-                        car.body.children[2].rotation.z = w_rotation.z;
-                    });
+					if (isGameOn) {
+						// wheels turn right
+						var w_rotation = {y: 0, z: 0};
+						var w_target_rotation = {y: 0, z: .5};
+						var tween_wheels = new TWEEN.Tween(w_rotation).to(w_target_rotation, 125).onUpdate(function(){
+							steering = true;
+							car.body.children[1].rotation.y = w_rotation.y;
+							car.body.children[2].rotation.y = w_rotation.y;
+							car.body.children[1].rotation.z = w_rotation.z;
+							car.body.children[2].rotation.z = w_rotation.z;
+						});
 
-                    // car turns right
-                    var b_rotation = {y: 0};
-                    var b_target_rotation = {y: -.2};
-                    var tween_body_r = new TWEEN.Tween(b_rotation).to(b_target_rotation, 250).onUpdate(function(){
-                        car.body.__dirtyRotation = true;
-                        car.body.rotation.y = b_rotation.y;
-                    });
+						// car turns right
+						var b_rotation = {y: 0};
+						var b_target_rotation = {y: -.2};
+						var tween_body_r = new TWEEN.Tween(b_rotation).to(b_target_rotation, 250).onUpdate(function(){
+							car.body.__dirtyRotation = true;
+							car.body.rotation.y = b_rotation.y;
+						});
 
-                    // car goes right
-                    var b_position = {z: car.body.position.z};
-                    var b_target_position = {z: car.body.position.z + 40};
-                    var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
-                    .onUpdate(function(){
-                        car.body.__dirtyPosition = true;
-                        car.body.position.z = b_position.z;
-                    });
+						// car goes right
+						var b_position = {z: car.body.position.z};
+						var b_target_position = {z: car.body.position.z + 40};
+						var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
+						.onUpdate(function(){
+							car.body.__dirtyPosition = true;
+							car.body.position.z = b_position.z;
+						});
 
-                    if (!steering) {
-                        tween_body_r.chain(tween_body_p);
-                        tween_wheels.chain(tween_body_r);
-                        tween_wheels.start();
-                    } else {
-                        tween_body_p.start();
-                    }
+						if (!steering) {
+							tween_body_r.chain(tween_body_p);
+							tween_wheels.chain(tween_body_r);
+							tween_wheels.start();
+						} else {
+							tween_body_p.start();
+						}
+					}
 
 					break;
 			}
@@ -185,37 +192,41 @@ function createScene() {
 				case 38:
 					// up: stop
 
-					var speed = {s: rotationSpeed};
-					var speed_target = {s: .5};
-					var tween_speed = new TWEEN.Tween(speed).to(speed_target, 2000).onUpdate(function(){
-						rotationSpeed = speed.s;
-					}).easing(TWEEN.Easing.Quadratic.Out);
-					tween_speed.start();
+					if (isGameOn) {
+						var speed = {s: rotationSpeed};
+						var speed_target = {s: .5};
+						var tween_speed = new TWEEN.Tween(speed).to(speed_target, 2000).onUpdate(function(){
+							rotationSpeed = speed.s;
+						}).easing(TWEEN.Easing.Quadratic.Out);
+						tween_speed.start();
+					}
 
 					break;
 
 				case 37:
 				case 39:
-					// Up: turn normal
+					// Left/Right: turn normal
 
-					// wheels turn normal
-					var w_rotation = {z: car.body.children[1].rotation.z};
-					var w_target_rotation = {z: 0};
-					var tween_wheels = new TWEEN.Tween(w_rotation).to(w_target_rotation, 125).onUpdate(function(){
-						car.body.children[1].rotation.z = w_rotation.z;
-						car.body.children[2].rotation.z = w_rotation.z;
-					});
+					if (isGameOn) {
+						// wheels turn normal
+						var w_rotation = {z: car.body.children[1].rotation.z};
+						var w_target_rotation = {z: 0};
+						var tween_wheels = new TWEEN.Tween(w_rotation).to(w_target_rotation, 125).onUpdate(function(){
+							car.body.children[1].rotation.z = w_rotation.z;
+							car.body.children[2].rotation.z = w_rotation.z;
+						});
 
-					// car turns left
-					var b_rotation = {y: car.body.rotation.y};
-					var b_target_rotation = {y: 0};
-					var tween_body_r = new TWEEN.Tween(b_rotation).to(b_target_rotation, 250).onUpdate(function(){
-						car.body.__dirtyRotation = true;
-						car.body.rotation.y = b_rotation.y;
-					}).onComplete(steering = false);
+						// car turns normal
+						var b_rotation = {y: car.body.rotation.y};
+						var b_target_rotation = {y: 0};
+						var tween_body_r = new TWEEN.Tween(b_rotation).to(b_target_rotation, 250).onUpdate(function(){
+							car.body.__dirtyRotation = true;
+							car.body.rotation.y = b_rotation.y;
+						}).onComplete(steering = false);
 
-					tween_wheels.chain(tween_body_r);
-					tween_wheels.start();
+						tween_wheels.chain(tween_body_r);
+						tween_wheels.start();
+					}
 
 					break;
 			}
@@ -369,6 +380,18 @@ function createRamp(){
 	scene.add(ramp.mesh);
 }
 
+function resetCar() {
+	car.body.__dirtyPosition = true;
+	car.body.__dirtyRotation = true;
+	rotationSpeed = 0;
+	car.body.children[1].rotation.z = 0;
+	car.body.children[2].rotation.z = 0;
+	car.body.position.set(-100, 12, 0);
+	car.body.rotation.set(0, 0, 0);
+
+	isGameOn = true;
+}
+
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
@@ -384,6 +407,8 @@ function init() {
 	createForest();
 	createRocks();
 
+	isGameOn = true;
+
 	loop();
 }
 
@@ -393,6 +418,7 @@ function loop(){
 	rock.mesh.__dirtyRotation = true;
 	ramp.mesh.__dirtyRotation = true;
 	coin.mesh.__dirtyRotation = true;
+	car.body.__dirtyPosition = true;
 
 	ground.mesh.rotation.z += .001*rotationSpeed;
 	forest.mesh.rotation.z += .001*rotationSpeed;
@@ -406,6 +432,7 @@ function loop(){
 		}
 	});
 
+	car.body.position.x = -100;
 	if (!steering) {
 		car.body.children[1].rotation.y -= .1*rotationSpeed;
 		car.body.children[2].rotation.y -= .1*rotationSpeed;
@@ -416,7 +443,13 @@ function loop(){
 	TWEEN.update();
 
 	scene.simulate();
-	//console.log(car.body._physijs.children[1].touches);
+
+	var touches = car.body._physijs.touches;
+	if (touches.length > 1 && (touches.includes(26) || touches.includes(47))) {
+		isGameOn = false;
+		setTimeout(resetCar, 3000);
+	}
+
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
 	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
 	//controls.update();
