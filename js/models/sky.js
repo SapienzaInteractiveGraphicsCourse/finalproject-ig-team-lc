@@ -2,12 +2,16 @@ import { Cloud } from './cloud.js';
 
 const CloudHeight = 1500;
 
+function rangedRandom(min, max){
+    return Math.random() * (max-min+1) + min;
+}
+
 var Sky = function(){
 	// container
 	this.mesh = new THREE.Group();
 
 	// number of clouds
-	this.nClouds = 50;
+	this.nClouds = 60;
 
 	// distribute clouds
 	var stepAngle = Math.PI*2 / this.nClouds;
@@ -24,7 +28,7 @@ var Sky = function(){
 		cloud.mesh.position.y = Math.sin(angle)*height;
 		cloud.mesh.position.x = Math.cos(angle)*height;
 		// clouds at random depths inside the scene
-		cloud.mesh.position.z = -400-Math.random()*400;
+		cloud.mesh.position.z = rangedRandom(-500, 200);
 		cloud.mesh.rotation.z = angle + Math.PI/2;
 
 		// random scale for each cloud
