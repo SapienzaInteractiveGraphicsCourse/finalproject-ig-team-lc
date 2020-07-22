@@ -112,7 +112,7 @@ function createScene() {
 
 						// car goes left
 						var b_position = {z: car.body.position.z};
-						var b_target_position = {z: car.body.position.z - 10};
+						var b_target_position = {z: car.body.position.z - 40};
 						var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
 						.onUpdate(function(){
 							car.body.__dirtyPosition = true;
@@ -155,7 +155,7 @@ function createScene() {
 	
 						// car goes right
 						var b_position = {z: car.body.position.z};
-						var b_target_position = {z: car.body.position.z + 10};
+						var b_target_position = {z: car.body.position.z + 40};
 						var tween_body_p = new TWEEN.Tween(b_position).to(b_target_position, 250)
 						.onUpdate(function(){
 							car.body.__dirtyPosition = true;
