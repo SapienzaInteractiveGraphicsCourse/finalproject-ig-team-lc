@@ -14,6 +14,9 @@ var controls;
 var axesHelper = new THREE.AxesHelper( 30 );
 var steering = false;
 var isGameOn = false;
+var health = 3;
+var points = 0;
+var gameOver = false;
 
 function dynamicCarPosZ(){
 		if(car.body.position.z > 30){
@@ -23,12 +26,22 @@ function dynamicCarPosZ(){
 };
 
 function handleCollision(collided_with){
+	// "this" is the car
+
 	switch ( collided_with ) {
 
-		case collided_with:
-			console.log(collided_with);
+		case forest.mesh:
+		case rock.mesh:
+			health -= 1;
+			console.log("health: "+health)
+			isGameOn = false;
+			setTimeout(resetCar, 3000);
 			break;
 	}
+
+	/*if (collided_with == forest.mesh){
+		console.log("trunk Hit")
+	}*/
 }
 
 function createScene() {
@@ -36,7 +49,7 @@ function createScene() {
 	WIDTH = window.innerWidth;
 
 	scene = new Physijs.Scene;
-	scene.setGravity(new THREE.Vector3( 0, -70, 0 ));
+	scene.setGravity(new THREE.Vector3( 0, -90, 0 ));
 
 	// fog effect
 	scene.fog = new THREE.Fog(0xdeedff, 100, 950);
@@ -244,26 +257,28 @@ function winResize() {
 }
 
 // LIGHTS
-var hemisphereLight, shadowLight;
+var hemisphereLight, directionalLight;
 
 function createLights() {
 	hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
-	shadowLight = new THREE.DirectionalLight(0xffffff, .9);
-	shadowLight.position.set(150, 350, 350);
-	shadowLight.castShadow = true;
+	hemisphereLight.name = "hemisphereLight";
+	directionalLight = new THREE.DirectionalLight(0xffffff, .9);
+	directionalLight.name = "directionalLight";
+	directionalLight.position.set(150, 350, 350);
+	directionalLight.castShadow = true;
 
-	shadowLight.shadow.camera.left = -400;
-	shadowLight.shadow.camera.right = 400;
-	shadowLight.shadow.camera.top = 400;
-	shadowLight.shadow.camera.bottom = -400;
-	shadowLight.shadow.camera.near = 1;
-	shadowLight.shadow.camera.far = 1000;
+	directionalLight.shadow.camera.left = -400;
+	directionalLight.shadow.camera.right = 400;
+	directionalLight.shadow.camera.top = 400;
+	directionalLight.shadow.camera.bottom = -400;
+	directionalLight.shadow.camera.near = 1;
+	directionalLight.shadow.camera.far = 1000;
 
-	shadowLight.shadow.mapSize.width = 2048;
-	shadowLight.shadow.mapSize.height = 2048;
+	directionalLight.shadow.mapSize.width = 2048;
+	directionalLight.shadow.mapSize.height = 2048;
 
 	scene.add(hemisphereLight);
-	scene.add(shadowLight);
+	scene.add(directionalLight);
 }
 
 var ground, car, sky, forest, rock, coin, ramp, coinSeries;
@@ -288,89 +303,24 @@ function createSky(){
 	scene.add(sky.mesh);
 }
 
-
 function createForest(){
 	forest = new Forest();
 	forest.mesh.position.y = -1300;
-
 	scene.add(forest.mesh);
-
-
-		/*
-		tree.addConstraint(scene, ground.mesh,
-			new THREE.Vector3(
-				tree.trunk.position.x,
-				tree.trunk.position.y - tree.trunk.geometry.parameters.height/2,
-				tree.trunk.position.z
-			)
-		);
-		// top of tree to ground
-		tree.addConstraint(scene, ground.mesh,
-			new THREE.Vector3(
-				tree.trunk.position.x,
-				tree.trunk.position.y + tree.trunk.geometry.parameters.height/2,
-				tree.trunk.position.z
-			)
-		);*/
-
-	/*
-			// base of tree to ground
-			tree.addConstraint(scene, ground.mesh,
-				new THREE.Vector3(
-					tree.trunk.position.x,
-					tree.trunk.position.y - tree.trunk.geometry.parameters.height/2,
-					tree.trunk.position.z
-				)
-			);
-			// top of tree to ground
-			tree.addConstraint(scene, ground.mesh,
-				new THREE.Vector3(
-					tree.trunk.position.x,
-					tree.trunk.position.y + tree.trunk.geometry.parameters.height/2,
-					tree.trunk.position.z
-				)
-			);
-	*/
-
-	//forest.forest.position.y = -1300;
-	//scene.add(forest.forest);
-
-
-/*
-	for( var i = 0; i < forest.nTrees; i++){
-		forest.forest.children[i].addConstraint(scene, ground.mesh, new THREE.Vector3( forest.forest.children[i].position.x,
-			forest.forest.children[i].position.y - forest.forest.children[i].geometry.parameters.height/2,
-			forest.forest.children[i].position.z ));
-		forest.forest.children[i].addConstraint(scene, ground.mesh, new THREE.Vector3( forest.children[i].position.x,
-			forest.forest.children[i].position.y + forest.forest.children[i].geometry.parameters.height/2,
-			forest.forest.children[i].position.z ));
-	}
-
-
-	// base of tree to ground
-	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( tree.trunk.position.x,
-		tree.trunk.position.y - tree.trunk.geometry.parameters.height/2,
-		tree.trunk.position.z ));
-	// top of tree to ground
-	tree.addConstraint(scene, ground.mesh, new THREE.Vector3( forest.trunk.position.x,
-		tree.trunk.position.y + tree.trunk.geometry.parameters.height/2,
-		tree.trunk.position.z ));
-*/
 }
-
-
 
 function createCoins(){
 	coin = new Coin();
 	coin.mesh.position.y = -1300;
 	scene.add(coin.mesh);
-	//coin.mesh.add( axesHelper );
+	//collidableMeshList = coin.collidableMeshList;
+	//console.log("collidableMeshList: ",collidableMeshList);
+
 }
 
 function createRocks(){
 	rock = new Rock();
 	rock.mesh.position.y = -1300;
-
 	scene.add(rock.mesh);
 }
 
@@ -388,6 +338,22 @@ function resetCar() {
 	car.body.children[2].rotation.z = 0;
 	car.body.position.set(-100, 12, 0);
 	car.body.rotation.set(0, 0, 0);
+
+	isGameOn = true;
+}
+function restart(){
+	for( var i = scene.children.length - 1; i >= 0; i--){
+		var obj = scene.children[i];
+		scene.remove(obj);
+	}
+	createLights();
+	createSky();
+	createGround();
+	createCar();
+	createRamp();
+	createCoins();
+	createForest();
+	createRocks();
 
 	isGameOn = true;
 }
@@ -431,6 +397,30 @@ function loop(){
 			child.rotation.z += 0.05;
 		}
 	});
+	// Coins collisions
+	var originPoint = car.body.position.clone();
+	for (var vertexIndex = 0; vertexIndex < car.body.geometry.vertices.length; vertexIndex++)
+	{
+		var localVertex = car.body.geometry.vertices[vertexIndex].clone();
+		var globalVertex = localVertex.applyMatrix4( car.body.matrix );
+		var directionVector = globalVertex.sub( car.body.position );
+
+		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+		for(var i = 0; i < coin.mesh.children.length; i++){
+			var collisionResults = ray.intersectObject( coin.mesh.children[i] );
+			if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ){
+
+				coin.mesh.remove(coin.mesh.children[i]);
+				// remove coin from memory
+				coin.mesh.children[i].geometry.dispose();
+				coin.mesh.children[i].material.dispose();
+				coin.mesh.children[i].material.map.dispose();
+				// coins count increased
+				points = coin.nCoins - coin.mesh.children.length;
+				console.log("points: "+points);
+			}
+		}
+	}
 
 	car.body.position.x = -100;
 	if (!steering) {
@@ -443,11 +433,18 @@ function loop(){
 	TWEEN.update();
 
 	scene.simulate();
-
+/*
 	var touches = car.body._physijs.touches;
-	if (touches.length > 1 && (touches.includes(26) || touches.includes(47))) {
+	if ( touches.length > 1 && (touches.includes(26) || touches.includes(47)) ) {
+		health -= 1;
+		console.log("health: "+health)
 		isGameOn = false;
 		setTimeout(resetCar, 3000);
+	}
+*/
+	if (health <= 0){
+		gameOver = true;
+		//TODO: link to a button that calls restart function
 	}
 
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);

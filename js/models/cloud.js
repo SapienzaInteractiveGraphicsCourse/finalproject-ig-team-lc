@@ -2,7 +2,9 @@ import { Colors } from '../colors.js';
 
 var Cloud = function(){
 	// create a container to hold different parts of the cloud
-	this.mesh = new THREE.Object3D();
+	this.mesh = new THREE.Group();
+	this.mesh.name = "cloudsGroup";
+	
 	var geometry = new THREE.SphereGeometry(20,40,40);
 	var loader = new THREE.TextureLoader();
 	var material = new THREE.MeshPhongMaterial({ map: loader.load( "textures/clouds.jpg" )});

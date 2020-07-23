@@ -3,7 +3,7 @@ import { Colors } from '../colors.js';
 var Ground = function(){
 
 	// create ground cylinder;
-	var geometry = new THREE.CylinderGeometry(1300,1300,700,100,10, true);
+	var geometry = new THREE.CylinderGeometry(1300,1300,700,100,10);
 
 	// rotate on x axis
 	geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI/2));
@@ -45,6 +45,7 @@ var Ground = function(){
 	this.mesh = new Physijs.ConvexMesh(geometry, material, 0);
 	// ground receive shadows
 	this.mesh.receiveShadow = true;
+	this.mesh.name = "ground";
 }
 
 // function that simulate the ground irregularities

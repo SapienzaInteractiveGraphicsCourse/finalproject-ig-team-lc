@@ -264,6 +264,7 @@ function createSphere(radius, posX, posY, posZ){
 }
 
 /*
+// HEAVIER TREE
 var Tree = function(){
     var trunk = createTrunk(TrunkGeom.x, TrunkGeom.y , TrunkGeom.z, TrunkGeom.w,
         0, 40, 0, 'trunk.jpg');
@@ -325,6 +326,8 @@ var Forest = function(){
     var centralMesh = createSphere(2, 0, 0, 0);
 
     this.mesh = centralMesh;
+    this.mesh.name = "forestCenter";
+
 
 	this.nTrees = 20;
 	var stepAngle =2*Math.PI / this.nTrees;
@@ -360,7 +363,9 @@ var Coin = function(){
     var centralMesh = createSphere(2, 0, 0, 0);
 
     this.mesh = centralMesh;
+    this.mesh.name = "coinsCenter";
 
+    //this.collidableMeshList = [];
 	this.nCoins = 50;
 	var stepAngle =2*Math.PI / this.nCoins;
 	for(var i=0; i<this.nCoins; i++){
@@ -388,6 +393,7 @@ var Coin = function(){
             }
         }
         takenPosArray.push(objPos);
+        //this.collidableMeshList.push(coin);
 
 		this.mesh.add(coin);
 
@@ -399,6 +405,7 @@ var Rock = function(){
     var centralMesh = createSphere(2, 0, 0, 0);
 
     this.mesh = centralMesh;
+    this.mesh.name = "rocksCenter";
 
 	this.nRocks = 19;
 	var stepAngle =2*Math.PI / this.nRocks;
@@ -433,6 +440,7 @@ var Rock = function(){
 var Ramp = function(){
    var centralMesh = createSphere(2, 0, 0, 0);
    this.mesh = centralMesh;
+   this.mesh.name = "rampCenter";
    this.nRamps = 15;
    var stepAngle =2*Math.PI / this.nRamps;
    for(var i=0; i<this.nRamps; i++){
@@ -452,7 +460,7 @@ var Ramp = function(){
                console.log("distance RAMP before: "+objPos.distanceTo(pos));
                objPos.x = ramp.position.x = Math.cos(angle+newAngle)*height;
                objPos.y = ramp.position.y = Math.sin(angle+newAngle)*height;
-               objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 110);
+               objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 150);
                ramp.rotation.z = angle+newAngle - Math.PI/2;
                k++;
                console.log("RAMP repositioned "+ k + " time");

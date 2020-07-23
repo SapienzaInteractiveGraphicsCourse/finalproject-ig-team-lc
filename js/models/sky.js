@@ -9,6 +9,7 @@ function rangedRandom(min, max){
 var Sky = function(){
 	// container
 	this.mesh = new THREE.Group();
+    this.mesh.name = "skyGroup";
 
 	// number of clouds
 	this.nClouds = 60;
