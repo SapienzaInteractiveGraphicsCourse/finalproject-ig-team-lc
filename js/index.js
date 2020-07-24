@@ -49,6 +49,7 @@ function createScene() {
 	WIDTH = window.innerWidth;
 
 	scene = new Physijs.Scene;
+	scene.name = "scene";
 	scene.setGravity(new THREE.Vector3( 0, -90, 0 ));
 
 	// fog effect
@@ -246,6 +247,7 @@ function createScene() {
 		}
 	);
 	//scene.add( axesHelper );
+	console.log("scene: ",scene);
 }
 
 function winResize() {
@@ -331,13 +333,20 @@ function createRamp(){
 }
 
 function resetCar() {
-	car.body.__dirtyPosition = true;
+	var carMesh = scene.getObjectByName("body");
+	scene.remove(carMesh);
+	carMesh.geometry.dispose();
+	carMesh.material.dispose();
+	//carMesh.material.texture.dispose();
+
+	createCar();
+	/*car.body.__dirtyPosition = true;
 	car.body.__dirtyRotation = true;
 	rotationSpeed = 0;
 	car.body.children[1].rotation.z = 0;
 	car.body.children[2].rotation.z = 0;
 	car.body.position.set(-100, 12, 0);
-	car.body.rotation.set(0, 0, 0);
+	car.body.rotation.set(0, 0, 0);*/
 
 	isGameOn = true;
 }
@@ -372,6 +381,7 @@ function init() {
 	createCoins();
 	createForest();
 	createRocks();
+	console.log("here");
 
 	isGameOn = true;
 
