@@ -33,7 +33,7 @@ var Ground = function(){
 			//bumpMap: loader.load( 'textures/groundBump.png')
 		}),
 		.8, //  friction
-		.5 //  restitution
+		.2 //  restitution
 	);
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 	material.map.repeat.set( 135, 15);

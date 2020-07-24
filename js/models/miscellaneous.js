@@ -329,7 +329,7 @@ var Forest = function(){
     this.mesh.name = "forestCenter";
 
 
-	this.nTrees = 20;
+	this.nTrees = 30;
 	var stepAngle =2*Math.PI / this.nTrees;
 	for(var i=0; i<this.nTrees; i++){
 		var tree = new Tree();
@@ -460,7 +460,7 @@ var Ramp = function(){
                console.log("distance RAMP before: "+objPos.distanceTo(pos));
                objPos.x = ramp.position.x = Math.cos(angle+newAngle)*height;
                objPos.y = ramp.position.y = Math.sin(angle+newAngle)*height;
-               objPos.z = ramp.position.z = radnomRoadSideZ(-340, 340, 150);
+               objPos.z = ramp.position.z = radnomRoadSideZ(-300, 300, 150);
                ramp.rotation.z = angle+newAngle - Math.PI/2;
                k++;
                console.log("RAMP repositioned "+ k + " time");

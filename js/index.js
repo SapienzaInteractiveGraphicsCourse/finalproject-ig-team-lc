@@ -1,6 +1,7 @@
 import { Sky } from './models/sky.js';
 import { Ground } from './models/ground.js';
 import { Car } from './models/car.js';
+import { Colors } from './colors.js';
 import { Tree, Forest, Coin, Rock, Ramp } from './models/miscellaneous.js';
 
 Physijs.scripts.worker = './js/physijs_worker.js';
@@ -17,6 +18,10 @@ var isGameOn = false;
 var health = 3;
 var points = 0;
 var gameOver = false;
+var rotationResetCar_Executed = false;
+var collisionResetCar_Executed = false;
+
+//var fontLoader = new THREE.FontLoader();
 
 var healthLabel = document.getElementById("healthLabel");
 var healthBar = document.getElementById("health");
@@ -54,10 +59,6 @@ function handleCollision(collided_with){
 			setTimeout(resetCar, 3000);
 			break;
 	}
-
-	/*if (collided_with == forest.mesh){
-		console.log("trunk Hit")
-	}*/
 }
 
 function createScene() {
@@ -311,7 +312,6 @@ function createCar(){
 	car = new Car();
 	car.body.addEventListener('collision', handleCollision);
 	scene.add(car.body);
-
 }
 
 // push down sky to let clouds closer to the ground
@@ -348,22 +348,35 @@ function createRamp(){
 	scene.add(ramp.mesh);
 }
 
+/*function createText(){
+
+	fontLoader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+		var geometry = new THREE.TextGeometry( 'Hello three.js!', {
+			font: font,
+			size: 70,
+			height: 10,
+			curveSegments: 12,
+			bevelEnabled: true,
+			bevelThickness: 5,
+			bevelSize: 5,
+			bevelOffset: 0,
+			bevelSegments: 3
+		} );
+		geometry.center(mesh);
+		var material = new THREE.MeshPhongMaterial({ color: Colors.red });
+      	var textMesh = new THREE.Mesh( geometry, material );
+		textMesh.position
+		scene.add( textMesh );
+	} );
+}*/
+
 function resetCar() {
 	var carMesh = scene.getObjectByName("body");
 	scene.remove(carMesh);
 	carMesh.geometry.dispose();
 	carMesh.material.dispose();
-	//carMesh.material.texture.dispose();
-
 	createCar();
-	/*car.body.__dirtyPosition = true;
-	car.body.__dirtyRotation = true;
-	rotationSpeed = 0;
-	car.body.children[1].rotation.z = 0;
-	car.body.children[2].rotation.z = 0;
-	car.body.position.set(-100, 12, 0);
-	car.body.rotation.set(0, 0, 0);*/
-
 	isGameOn = true;
 }
 function restart(){
@@ -381,6 +394,7 @@ function restart(){
 	createCoins();
 	createForest();
 	createRocks();
+
 
 	isGameOn = true;
 
@@ -402,7 +416,7 @@ function init() {
 	createCoins();
 	createForest();
 	createRocks();
-	console.log("here");
+	//createText();
 
 	isGameOn = true;
 
@@ -486,6 +500,23 @@ function loop(){
 			gameOnPanel.hidden = true;
 			gameOverPanel.hidden = false;
 		}, 3000);
+	}
+	if (points == coin.nCoins){
+		win = true;
+		restart();
+	}
+	var worldRotation = new THREE.Quaternion();
+	car.body.getWorldQuaternion(worldRotation)
+	if (worldRotation.x >0.5 ||
+		worldRotation.x < -0.5 ||
+		worldRotation.y > 0.5 ||
+		worldRotation.y < -0.5)
+	{
+		if(rotationResetCar_Executed == false){
+			isGameOn = false;
+			setTimeout(resetCar, 2000);
+			rotationResetCar_Executed = true;
+		}
 	}
 
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);

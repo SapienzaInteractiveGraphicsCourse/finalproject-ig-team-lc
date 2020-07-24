@@ -73,8 +73,8 @@ function createCylinderPhys(radiusTop, radiusBottom , height, radialSegments, po
 	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom , height, radialSegments);
 	var material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial({ color: color }),
-		.8, // medium friction
-		.2 // medium restitution
+		.8, //  friction
+		.2 //  restitution
 	);
 	var cylinder = new Physijs.CylinderMesh(geometry, material, mass);
 	cylinder.castShadow = cylinder.receiveShadow = true;
