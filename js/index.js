@@ -20,6 +20,7 @@ var points = 0;
 var gameOver = false;
 var rotationResetCar_Executed = false;
 var collisionResetCar_Executed = false;
+var fallingResetCar_Executed = false;
 
 //var fontLoader = new THREE.FontLoader();
 
@@ -515,6 +516,15 @@ function loop(){
 			rotationResetCar_Executed = true;
 		}
 	}
+	var worldPosition = new THREE.Vector3();
+	if (worldPosition.y < -20){
+		if(fallingResetCar_Executed == false){
+			isGameOn = false;
+			setTimeout(resetCar, 1500);
+			fallingResetCar_Executed = true;
+		}
+	}
+	console.log(car.body.getWorldPosition(worldPosition));
 
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
 	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
