@@ -420,6 +420,8 @@ window.addEventListener('load', init, false);
 
 function init() {
 
+
+
 	createScene();
 	createLights();
 	createSky();
@@ -467,7 +469,12 @@ function loop(){
 		for(var i = 0; i < coin.mesh.children.length; i++){
 			var collisionResults = ray.intersectObject( coin.mesh.children[i] );
 			if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ){
-
+				/*var c = coin.mesh.children[i]
+				c.position.lerp( new THREE.Vector3(
+					c.position.x,
+					c.position.y + 50,
+					c.position.z
+				), 1 );*/
 				coin.mesh.remove(coin.mesh.children[i]);
 				// remove coin from memory
 				coin.mesh.children[i].geometry.dispose();
@@ -539,7 +546,6 @@ function loop(){
 			fallingResetCar_Executed = true;
 		}
 	}
-	console.log(car.body.getWorldPosition(worldPosition));
 
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
 	camera.lookAt(car.body.position.x+200,car.body.position.y,car.body.position.z);
