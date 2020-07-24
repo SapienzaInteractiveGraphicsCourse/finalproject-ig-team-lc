@@ -23,6 +23,21 @@ var collisionResetCar_Executed = false;
 
 //var fontLoader = new THREE.FontLoader();
 
+var healthLabel = document.getElementById("healthLabel");
+var healthBar = document.getElementById("health");
+var coinsLabel = document.getElementById("coinsLabel");
+var coinsCounter = document.getElementById("coins");
+coinsCounter.textContent = points;
+
+var resetButton = document.getElementById("reset");
+resetButton.addEventListener("click", resetCar);
+
+var restartButton = document.getElementById("restart");
+restartButton.addEventListener("click", restart);
+
+var gameOverPanel = document.getElementById("gameOver");
+var gameOnPanel = document.getElementById("gameOn");
+
 function dynamicCarPosZ(){
 		if(car.body.position.z > 30){
 			return 30;
@@ -38,6 +53,7 @@ function handleCollision(collided_with){
 		case forest.mesh:
 		case rock.mesh:
 			health -= 1;
+			healthBar.value = health;
 			console.log("health: "+health)
 			isGameOn = false;
 			setTimeout(resetCar, 3000);
@@ -364,6 +380,8 @@ function resetCar() {
 	isGameOn = true;
 }
 function restart(){
+	gameOverPanel.hidden = true;
+
 	for( var i = scene.children.length - 1; i >= 0; i--){
 		var obj = scene.children[i];
 		scene.remove(obj);
@@ -379,6 +397,9 @@ function restart(){
 
 
 	isGameOn = true;
+
+	container.hidden = false;
+	gameOnPanel.hidden = false;
 }
 
 // call init function when window is loaded
@@ -441,6 +462,7 @@ function loop(){
 				coin.mesh.children[i].material.map.dispose();
 				// coins count increased
 				points = coin.nCoins - coin.mesh.children.length;
+				coinsCounter.textContent = points;
 				console.log("points: "+points);
 			}
 		}
@@ -469,6 +491,12 @@ function loop(){
 	if (health <= 0){
 		gameOver = true;
 		//TODO: link to a button that calls restart function
+		setTimeout(function() {
+			health = 3;
+			container.hidden = true;
+			gameOnPanel.hidden = true;
+			gameOverPanel.hidden = false;
+		}, 3000);
 	}
 	if (points == coin.nCoins){
 		win = true;

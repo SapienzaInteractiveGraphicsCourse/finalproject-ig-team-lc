@@ -8,3 +8,69 @@ body {
 	overflow: hidden;
 	background: linear-gradient(#91e5ff, #d8f0e9);
 }
+
+progress {
+	z-index:99;
+	position: absolute;
+	height: 20px;
+	width: 250px;
+	right:0;
+	margin:20px;
+}
+
+.coins {
+	z-index:99;
+	position: absolute;
+	color: yellow;
+	top:30;
+	right:240;
+	margin:20px;
+	font-weight: bold;
+}
+
+button {
+	z-index: 99;
+	position: absolute;
+}
+
+.healthLabel {
+	z-index:99;
+	position: absolute;
+	right:260;
+	margin: 20px;
+}
+
+.coinsLabel {
+	z-index:99;
+	position: absolute;
+	top:30;
+	right:260;
+	margin: 20px;
+}
+
+.reset {
+	height:30px;
+	width:100px;
+	bottom:0;
+	right:0;
+	margin:20px;
+}
+
+.gameOverLabel {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -60px;
+	margin-left: -60px;
+	text-align: center;
+}
+
+.restart {
+	height:30px;
+	width:100px;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -65px;
+}
