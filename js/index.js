@@ -15,6 +15,7 @@ var controls;
 var axesHelper = new THREE.AxesHelper( 30 );
 var steering = false;
 var isGameOn = false;
+var isCarRunning = false;
 var health = 3;
 var points = 0;
 var gameOver = false;
@@ -116,12 +117,13 @@ function createScene() {
 				case 38:
 					// up: start
 					if (isGameOn) {
+						isCarRunning = true;
 						if (rotationSpeed < 1.5) {
 							var speed = {s: rotationSpeed};
 							var speed_target = {s: rotationSpeed + .25};
 							var tween_speed = new TWEEN.Tween(speed).to(speed_target, 125).onUpdate(function(){
 								rotationSpeed = speed.s;
-							}).easing(TWEEN.Easing.Quadratic.In);
+							})
 							tween_speed.start();
 						}
 					}
@@ -131,7 +133,7 @@ function createScene() {
 				case 37:
 					// Left: left steering
 
-					if (isGameOn) {
+					if (isGameOn && isCarRunning) {
 						// wheels turn left
 						var w_rotation = {y: 0, z: 0};
 						var w_target_rotation = {y: 0, z: -.5};
@@ -174,7 +176,7 @@ function createScene() {
 				case 39:
 					// Right: right steering
 
-					if (isGameOn) {
+					if (isGameOn && isCarRunning) {
 						// wheels turn right
 						var w_rotation = {y: 0, z: 0};
 						var w_target_rotation = {y: 0, z: .5};
@@ -213,6 +215,15 @@ function createScene() {
 					}
 
 					break;
+					case 40:
+					// Down: braking
+
+					if (isGameOn) {
+						rotationSpeed = 0;
+						isCarRunning = false;
+					}
+
+					break;
 			}
 		}
 	);
@@ -225,9 +236,10 @@ function createScene() {
 					// up: stop
 
 					if (isGameOn) {
+						isCarRunning = true;
 						var speed = {s: rotationSpeed};
 						var speed_target = {s: .5};
-						var tween_speed = new TWEEN.Tween(speed).to(speed_target, 2000).onUpdate(function(){
+						var tween_speed = new TWEEN.Tween(speed).to(speed_target, 100).onUpdate(function(){
 							rotationSpeed = speed.s;
 						}).easing(TWEEN.Easing.Quadratic.Out);
 						tween_speed.start();
@@ -239,7 +251,7 @@ function createScene() {
 				case 39:
 					// Left/Right: turn normal
 
-					if (isGameOn) {
+					if (isGameOn && isCarRunning) {
 						// wheels turn normal
 						var w_rotation = {z: car.body.children[1].rotation.z};
 						var w_target_rotation = {z: 0};
