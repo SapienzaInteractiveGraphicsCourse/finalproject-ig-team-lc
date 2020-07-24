@@ -479,6 +479,9 @@ function loop(){
 		//TODO: link to a button that calls restart function
 		setTimeout(function() {
 			health = 3;
+			healthBar.value = health;
+			points = 0;
+			coinsCounter.textContent = points;
 			container.hidden = true;
 			gameOnPanel.hidden = true;
 			gameOverPanel.hidden = false;
