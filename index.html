@@ -9,6 +9,17 @@
 	</head>
 	<body>
 		<script type="module" src="./js/index.js"></script>
+		<div id="gameOn">
+			<label id="healthLabel" class="healthLabel">Health</label>
+			<progress id="health" value="3" max="3"></progress>
+			<label id="coinsLabel" class="coinsLabel">Coins</label>
+			<label id="coins" class="coins"></label>
+			<button id="reset" class="reset">Reset</button>
+		</div>
+		<div hidden id="gameOver">
+			<label id="gameOverLabel" class="gameOverLabel">GAME OVER</label>
+			<button id="restart" class="restart">Restart</button>
+		</div>
 		<div id="world"></div>
 	</body>
 </html>
