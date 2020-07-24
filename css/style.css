@@ -35,6 +35,12 @@ progress {
 button {
 	z-index: 99;
 	position: absolute;
+
+
+}
+button:hover {
+  background-color: red; /* Green */
+  color: white;
 }
 
 .healthLabel {
@@ -64,6 +70,12 @@ button {
 	bottom:0;
 	right:0;
 	margin:20px;
+	transition-duration: 0.4s;
+	font-weight: bold;
+	font-size: 16px;
+	font-family: sans-serif;
+	border-radius: 12px;
+	border: 2px solid #f25346;
 }
 
 .gameOverLabel {
