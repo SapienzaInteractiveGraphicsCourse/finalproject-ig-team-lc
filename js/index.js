@@ -391,6 +391,7 @@ function resetCar() {
 	carMesh.material.dispose();
 	createCar();
 	isGameOn = true;
+	steering = false;
 }
 function restart(){
 	gameOverPanel.hidden = true;
@@ -407,7 +408,6 @@ function restart(){
 	createCoins();
 	createForest();
 	createRocks();
-
 
 	isGameOn = true;
 
