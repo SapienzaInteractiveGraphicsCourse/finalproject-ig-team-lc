@@ -20,11 +20,14 @@ var health = 3;
 var points = 0;
 var record = 0;
 var gameOver = false;
+var win = false;
 var rotationResetCar_Executed = false;
 var collisionResetCar_Executed = false;
 var fallingResetCar_Executed = false;
 
 //var fontLoader = new THREE.FontLoader();
+
+container = document.getElementById('world');
 
 var healthLabel = document.getElementById("healthLabel");
 var healthBar = document.getElementById("health");
@@ -38,9 +41,14 @@ resetButton.addEventListener("click", resetCar);
 var restartButton = document.getElementById("restart");
 restartButton.addEventListener("click", restart);
 
+var restartWinButton = document.getElementById("restartWin");
+restartWinButton.addEventListener("click", restart);
+
 var gameOverPanel = document.getElementById("gameOver");
 var gameOnPanel = document.getElementById("gameOn");
 var recordLabel = document.getElementById("recordLabel");
+
+var winPanel = document.getElementById("win");
 
 function dynamicCarPosZ(){
 		if(car.body.position.z > 30){
@@ -104,7 +112,6 @@ function createScene() {
 	renderer.shadowMap.enabled = true;
 
 	// link renderer DOM element to container in html
-	container = document.getElementById('world');
 	container.appendChild(renderer.domElement);
 	//controls = new THREE.OrbitControls( camera, renderer.domElement );
 	//controls.update();
@@ -398,6 +405,7 @@ function resetCar() {
 }
 function restart(){
 	gameOverPanel.hidden = true;
+	winPanel.hidden = true;
 
 	for( var i = scene.children.length - 1; i >= 0; i--){
 		var obj = scene.children[i];
@@ -422,8 +430,6 @@ function restart(){
 window.addEventListener('load', init, false);
 
 function init() {
-
-
 
 	createScene();
 	createLights();
@@ -530,7 +536,18 @@ function loop(){
 	}
 	if (points == coin.nCoins){
 		win = true;
-		restart();
+		health = 3;
+		if (points > record) {
+			record = points;
+		}
+		points = 0;
+		setTimeout(function() {
+			healthBar.value = health;
+			coinsCounter.textContent = points;
+			container.hidden = true;
+			gameOnPanel.hidden = true;
+			winPanel.hidden = false;
+		}, 3000);
 	}
 	var worldRotation = new THREE.Quaternion();
 	car.body.getWorldQuaternion(worldRotation)

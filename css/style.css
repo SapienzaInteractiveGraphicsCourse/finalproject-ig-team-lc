@@ -88,6 +88,16 @@ button:hover {
 	text-align: center;
 }
 
+.winLabel {
+	z-index: 99;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -60px;
+	margin-left: -60px;
+	text-align: center;
+}
+
 .restart {
 	height:30px;
 	width:100px;
