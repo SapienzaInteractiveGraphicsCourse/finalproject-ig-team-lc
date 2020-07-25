@@ -546,19 +546,23 @@ function loop(){
 			winPanel.hidden = false;
 		}, 3000);
 	}
+
 	var worldRotation = new THREE.Quaternion();
 	car.body.getWorldQuaternion(worldRotation)
-	if (worldRotation.x >0.5 ||
+	if ( (worldRotation.x >0.5 ||
 		worldRotation.x < -0.5 ||
 		worldRotation.y > 0.5 ||
-		worldRotation.y < -0.5)
-	{
-		if(rotationResetCar_Executed == false){
-			isGameOn = false;
-			setTimeout(resetCar, 2000);
-			rotationResetCar_Executed = true;
-		}
+		worldRotation.y < -0.5 ) && rotationResetCar_Executed == false){
+
+		isGameOn = false;
+		setTimeout(resetCar, 2000);
+		rotationResetCar_Executed = true;
 	}
+
+	if(rotationResetCar_Executed == true){
+		setTimeout(function(){rotationResetCar_Executed = false;}, 3000);
+	}
+	
 	var worldPosition = new THREE.Vector3();
 	if (worldPosition.y < -20){
 		if(fallingResetCar_Executed == false){
