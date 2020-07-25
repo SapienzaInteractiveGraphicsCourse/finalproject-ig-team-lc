@@ -562,7 +562,7 @@ function loop(){
 	if(rotationResetCar_Executed == true){
 		setTimeout(function(){rotationResetCar_Executed = false;}, 3000);
 	}
-	
+
 	var worldPosition = new THREE.Vector3();
 	if (worldPosition.y < -20){
 		if(fallingResetCar_Executed == false){
@@ -570,6 +570,9 @@ function loop(){
 			setTimeout(resetCar, 1500);
 			fallingResetCar_Executed = true;
 		}
+	}
+	if(fallingResetCar_Executed == true){
+		setTimeout(function(){fallingResetCar_Executed = false;}, 3000);
 	}
 
 	camera.position.set(car.body.position.x-100 , car.body.position.y + 70 /*-( dynamicCarPosZ() )*/, car.body.position.z + 200);
