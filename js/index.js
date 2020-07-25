@@ -18,6 +18,7 @@ var isGameOn = false;
 var isCarRunning = false;
 var health = 3;
 var points = 0;
+var record = 0;
 var gameOver = false;
 var rotationResetCar_Executed = false;
 var collisionResetCar_Executed = false;
@@ -39,6 +40,7 @@ restartButton.addEventListener("click", restart);
 
 var gameOverPanel = document.getElementById("gameOver");
 var gameOnPanel = document.getElementById("gameOn");
+var recordLabel = document.getElementById("recordLabel");
 
 function dynamicCarPosZ(){
 		if(car.body.position.z > 30){
@@ -392,6 +394,7 @@ function resetCar() {
 	createCar();
 	isGameOn = true;
 	steering = false;
+	rotationSpeed = 0.5;
 }
 function restart(){
 	gameOverPanel.hidden = true;
@@ -512,7 +515,11 @@ function loop(){
 		gameOver = true;
 		//TODO: link to a button that calls restart function
 		health = 3;
+		if (points > record) {
+			record = points;
+		}
 		setTimeout(function() {
+			recordLabel.textContent = "Record: " + record + " coins";
 			healthBar.value = health;
 			points = 0;
 			coinsCounter.textContent = points;

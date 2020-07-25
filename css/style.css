@@ -79,6 +79,7 @@ button:hover {
 }
 
 .gameOverLabel {
+	z-index: 99;
 	position: absolute;
     top: 50%;
     left: 50%;
@@ -95,4 +96,14 @@ button:hover {
     left: 50%;
     margin-top: -30px;
     margin-left: -65px;
+}
+
+.recordLabel {
+	z-index:99;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -200px;
+	margin-left: -65px;
+	text-align: center;
 }
