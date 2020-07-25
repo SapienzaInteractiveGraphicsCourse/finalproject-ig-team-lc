@@ -128,14 +128,12 @@ function createScene() {
 					// up: start
 					if (isGameOn) {
 						isCarRunning = true;
-						if (rotationSpeed < 1.5) {
-							var speed = {s: rotationSpeed};
-							var speed_target = {s: rotationSpeed + .25};
-							var tween_speed = new TWEEN.Tween(speed).to(speed_target, 125).onUpdate(function(){
-								rotationSpeed = speed.s;
-							})
-							tween_speed.start();
-						}
+						var speed = {s: rotationSpeed};
+						var speed_target = {s: 1.5};
+						var tween_speed = new TWEEN.Tween(speed).to(speed_target, 500).onUpdate(function(){
+							rotationSpeed = speed.s;
+						})
+						tween_speed.start();
 					}
 
 					break;
