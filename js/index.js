@@ -511,8 +511,8 @@ function loop(){
 	if (health <= 0){
 		gameOver = true;
 		//TODO: link to a button that calls restart function
+		health = 3;
 		setTimeout(function() {
-			health = 3;
 			healthBar.value = health;
 			points = 0;
 			coinsCounter.textContent = points;
