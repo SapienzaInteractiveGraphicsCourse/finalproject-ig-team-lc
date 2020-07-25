@@ -478,11 +478,11 @@ function loop(){
 					c.position.y + 50,
 					c.position.z
 				), 1 );*/
-				coin.mesh.remove(coin.mesh.children[i]);
 				// remove coin from memory
 				coin.mesh.children[i].geometry.dispose();
 				coin.mesh.children[i].material.dispose();
 				coin.mesh.children[i].material.map.dispose();
+				coin.mesh.remove(coin.mesh.children[i]);
 				// coins count increased
 				points = coin.nCoins - coin.mesh.children.length;
 				coinsCounter.textContent = points;
