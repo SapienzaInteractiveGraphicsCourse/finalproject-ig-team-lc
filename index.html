@@ -9,7 +9,10 @@
 	</head>
 	<body>
 		<script type="module" src="./js/index.js"></script>
-		<div id="gameOn">
+		<section id="loading-screen">
+			<div id="loader"></div>
+		</section>
+		<div hidden id="gameOn">
 			<label id="healthLabel" class="healthLabel">Health</label>
 			<progress id="health" value="3" max="3"></progress>
 			<label id="coinsLabel" class="coinsLabel">Coins</label>
@@ -25,6 +28,6 @@
 			<label id="winLabel" class="winLabel">YOU WON!!!</label>
 			<button id="restartWin" class="restart">Restart</button>
 		</div>
-		<div id="world"></div>
+		<div hidden id="world"></div>
 	</body>
 </html>

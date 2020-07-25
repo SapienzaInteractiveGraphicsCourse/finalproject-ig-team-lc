@@ -28,6 +28,7 @@ var fallingResetCar_Executed = false;
 //var fontLoader = new THREE.FontLoader();
 
 container = document.getElementById('world');
+const loadingScreen = document.getElementById( 'loading-screen' );
 
 var healthLabel = document.getElementById("healthLabel");
 var healthBar = document.getElementById("health");
@@ -404,6 +405,8 @@ function resetCar() {
 	rotationSpeed = 0.5;
 }
 function restart(){
+	loadingScreen.classList.remove('fade-out');
+	gameOnPanel.hidden = true;
 	gameOverPanel.hidden = true;
 	winPanel.hidden = true;
 
@@ -421,16 +424,12 @@ function restart(){
 	createRocks();
 
 	isGameOn = true;
-
-	container.hidden = false;
-	gameOnPanel.hidden = false;
 }
 
 // call init function when window is loaded
 window.addEventListener('load', init, false);
 
 function init() {
-
 	createScene();
 	createLights();
 	createSky();

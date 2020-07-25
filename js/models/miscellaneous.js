@@ -11,7 +11,17 @@ const CarStartPos = new THREE.Vector3( -100, 45, 0 );
 var takenPosArray = [];
 takenPosArray.push(CarStartPos);
 
-var loader = new THREE.TextureLoader();
+const container = document.getElementById('world');
+const loadingScreen = document.getElementById( 'loading-screen' );
+const gameOnPanel = document.getElementById("gameOn");
+
+var manager = new THREE.LoadingManager();
+manager.onLoad = function ( ) {
+	loadingScreen.classList.add( 'fade-out' );
+	gameOnPanel.hidden = false;
+	container.hidden = false;
+};
+var loader = new THREE.TextureLoader(manager);
 
 function rangedRandom(min, max){
     return Math.random() * (max-min+1) + min;
