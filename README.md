@@ -1,8 +1,8 @@
 # Racing Time
 
-The project is a platform game in which the player commands a car in an outdoor environment to collect coins while avoiding obstacles. The idea was inspired by an Android game called Hillside Drive and our purpose was recreating the gameplay structure into a 3D environment.
+The Intercactive Graphics course final project is a platform game in which the player commands a car in an outdoor environment to collect coins while avoiding obstacles. The idea was inspired by an Android game called Hillside Drive and our purpose was recreating the gameplay structure into a 3D environment.
 
-Project website at this [link](https://sapienzainteractivegraphicscourse.github.io/finalproject-ig-team-lc/)
+Project demo at this [link](https://sapienzainteractivegraphicscourse.github.io/finalproject-ig-team-lc/)
 
 # Controls
 
