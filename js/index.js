@@ -407,6 +407,8 @@ function restart(){
 	gameOnPanel.hidden = true;
 	gameOverPanel.hidden = true;
 	winPanel.hidden = true;
+	health = 3;
+	points = 0;
 
 	for( var i = scene.children.length - 1; i >= 0; i--){
 		var obj = scene.children[i];
