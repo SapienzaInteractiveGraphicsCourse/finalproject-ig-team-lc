@@ -4,7 +4,7 @@ The Intercactive Graphics course final project is a platform game in which the p
 
 ![](textures/game.png)
 
-Project demo at this [link](https://sapienzainteractivegraphicscourse.github.io/finalproject-ig-team-lc/)
+Project demo at this [LINK](https://sapienzainteractivegraphicscourse.github.io/finalproject-ig-team-lc/)
 
 # Controls
 
